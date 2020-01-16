@@ -1,0 +1,10 @@
+export const GET_WORDS = 'GET_WORDS';
+export const ADD_WORD = 'ADD_WORD';
+export const DELETE_WORD = 'DELETE_WORD';
+export const SET_CURRENT = 'SET_CURRENT';
+export const CLEAR_CURRENT = 'CLEAR_CURRENT';
+export const UPDATE_WORD = 'UPDATE_WORD';
+export const CLEAR_WORDS = 'CLEAR_WORDS';
+export const SET_LOADING = 'SET_LOADING';
+export const WORDS_ERROR = 'WORDS_ERROR';
+export const SEARCH_WORDS = 'SEARCH_WORDS';
