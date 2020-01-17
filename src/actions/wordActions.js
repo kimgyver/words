@@ -60,7 +60,7 @@ export const addWord = word => async dispatch => {
 
     dispatch({
       type: ADD_WORD,
-      payload: data
+      payload: data.word
     });
   } catch (err) {
     dispatch({
@@ -140,8 +140,6 @@ export const searchWords = text => async dispatch => {
 
 // Set current word
 export const setCurrent = word => {
-  console.log(1111);
-  console.log(word);
   return {
     type: SET_CURRENT,
     payload: word

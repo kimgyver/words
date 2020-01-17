@@ -28,7 +28,7 @@ export default (state = initialState, action) => {
     case ADD_WORD:
       return {
         ...state,
-        words: [...state.words, action.payload],
+        words: [action.payload, ...state.words],
         loading: false
       };
     case DELETE_WORD:

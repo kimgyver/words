@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { setCurrent } from '../actions/wordActions';
+import PriorityBtn from './layout/PriorityBtn';
 
 // import V from './voicerss-tts.min.js';
 
@@ -29,7 +30,7 @@ const WordItem = ({ word, setCurrent }) => {
   let fontClass = 'card-content ';
   switch (word.priority) {
     case 1:
-      bgClass += 'red';
+      bgClass += 'orange';
       fontClass += 'white-text';
       break;
     case 2:
@@ -46,40 +47,34 @@ const WordItem = ({ word, setCurrent }) => {
   bgClass += ' darken-1';
 
   return (
-    // <div>
-    //   <b>{word.text}</b>: {word.definition} <br></br> = {word.synonyms}
-    //   {word.examples.map(ex => (
-    //     <li>
-    //       {' '}
-    //       <i>{ex}</i>
-    //     </li>
-    //   ))}
-    // </div>
-
     <div className='col s12 m4'>
       <div className={bgClass}>
         <div className={fontClass}>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <span className='card-title'>
               {word.text}{' '}
-              <a href='#!' onClick='javascript:textIt(this)'>
-                <img
-                  src='images/play-button.svg'
-                  height='15'
-                  width='15'
-                  alt=''
-                />
+              <a href='#!' onClick={() => window.tts(word.text)}>
+                <i className='tiny material-icons'>play_circle_outline</i>
               </a>
             </span>
+
             <div>
-              <img src='/images/edit.svg' height='20' width='20' alt='' />
-              <img src='/images/up.svg' height='20' width='20' alt='' />
+              <a
+                href='#edit-word-modal'
+                className='modal-trigger'
+                onClick={() => setCurrent(word)}
+              >
+                <i className='small material-icons'>edit</i>
+              </a>
+
+              {/* <PriorityBtn /> */}
+              <i className='small material-icons'>swap_vertical_circle</i>
               <a
                 href='#delete-word-modal'
                 className='modal-trigger'
                 onClick={() => setCurrent(word)}
               >
-                <img src='/images/remove.svg' height='20' width='20' alt='' />
+                <i className='small material-icons'>clear</i>
               </a>
             </div>
           </div>
@@ -90,13 +85,8 @@ const WordItem = ({ word, setCurrent }) => {
             {word.synonyms && (
               <div>
                 = <u>{word.synonyms}</u>{' '}
-                <a href='#!' onClick='javascript:textIt(this)'>
-                  <img
-                    src='/images/play-button.svg'
-                    height='15'
-                    width='15'
-                    alt=''
-                  />
+                <a href='#!' onClick={() => window.tts(word.synonyms)}>
+                  <i className='tiny material-icons'>play_circle_outline</i>
                 </a>
               </div>
             )}
@@ -105,14 +95,9 @@ const WordItem = ({ word, setCurrent }) => {
           {word.examples.map((ex, i) => (
             <li key={i}>
               <i>
-                {ex}{' '}
-                <a href='#!' onClick='textIt(this)'>
-                  <img
-                    src='/images/play-button.svg'
-                    height='15'
-                    width='15'
-                    alt=''
-                  />
+                {ex} {}
+                <a href='#!' onClick={() => window.tts(ex)}>
+                  <i className='tiny material-icons'>play_circle_outline</i>
                 </a>
               </i>
             </li>

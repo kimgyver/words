@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect } from 'react';
 import AddBtn from './components/layout/AddBtn';
 import AddWordModal from './components/modals/AddWordModal';
+import EditWordModal from './components/modals/EditWordModal';
 import DeleteWordModal from './components/modals/DeleteWordModal';
 import Words from './components/Words';
 import './App.css';
@@ -24,10 +25,7 @@ function App() {
           <AddBtn />
           <DeleteWordModal />
           <AddWordModal />
-          {/*
-        <EditLogModal />
-        <AddTechModel /> 
-        <TechListModal />*/}
+          <EditWordModal />
           <Words />
         </div>
       </Fragment>

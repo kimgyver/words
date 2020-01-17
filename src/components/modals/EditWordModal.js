@@ -1,35 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { addWord } from '../../actions/wordActions';
+import { updateWord } from '../../actions/wordActions';
 import M from 'materialize-css/dist/js/materialize.min.js';
 
-const AddWordModal = ({ addWord }) => {
+const EditWordModal = ({ current, updateWord }) => {
   const [text, setText] = useState('');
   const [definition, setDefinition] = useState('');
   const [synonyms, setSynonyms] = useState('');
   const [priority, setPriority] = useState('3');
   const [examples, setExamples] = useState([]);
 
+  useEffect(() => {
+    if (current) {
+      setText(current.text);
+      setDefinition(current.definition);
+      setSynonyms(current.synonyms);
+      setPriority(current.priority);
+      setExamples(current.examples);
+    }
+  }, [current]);
+
   const onSubmit = () => {
     if (text === '') {
-      M.toast({ html: 'Please enter a word to add...' });
+      M.toast({ html: 'Please enter a word to update...' });
     } else if (priority === '') {
       M.toast({ html: 'Please enter priority.' });
     } else {
-      const newWord = {
+      const updatedWord = {
+        _id: current._id,
         text,
         definition,
         synonyms,
         examples: finalizeExamples(),
         priority,
-        createdAt: new Date(),
         updatedAt: new Date()
       };
 
-      addWord(newWord);
+      updateWord(updatedWord);
 
-      M.toast({ html: `Word added... '${text}'` });
+      M.toast({ html: `Word updated... '${text}'` });
 
       // Clear Fields
       setText('');
@@ -65,34 +75,35 @@ const AddWordModal = ({ addWord }) => {
   };
 
   return (
-    <div id='add-word-modal' className='modal' style={modalStyle}>
+    <div id='edit-word-modal' className='modal' style={modalStyle}>
       <div className='modal-content'>
-        <h4>Add Word</h4>
+        <h4>Edit Word</h4>
         <div className='row'>
-          <div className='input-field'>
+          <div>
+            <label htmlFor='text' className='active'>
+              Word
+            </label>
             <input
               type='text'
               name='text'
               value={text}
               onChange={e => setText(e.target.value)}
+              // style={{ marginTop: '0.9rem' }}
             />
-            <label htmlFor='text' className='active'>
-              Word
-            </label>
           </div>
         </div>
 
         <div className='row'>
-          <div className='input-field'>
+          <div>
+            <label htmlFor='definition' className='active'>
+              Definition
+            </label>
             <input
               type='text'
               name='definition'
               value={definition}
               onChange={e => setDefinition(e.target.value)}
             />
-            <label htmlFor='definition' className='active'>
-              Definition
-            </label>
           </div>
         </div>
 
@@ -100,16 +111,16 @@ const AddWordModal = ({ addWord }) => {
           className='row'
           style={{ display: 'flex', justifyContent: 'space-between' }}
         >
-          <div className='input-field col s12'>
+          <div className='col s12'>
+            <label htmlFor='synonyms' className='active'>
+              Synonyms
+            </label>
             <input
               type='text'
               name='synonyms'
               value={synonyms}
               onChange={e => setSynonyms(e.target.value)}
             />
-            <label htmlFor='synonyms' className='active'>
-              Synonyms
-            </label>
           </div>
           <div>
             <label htmlFor='priority' className='active'>
@@ -134,16 +145,16 @@ const AddWordModal = ({ addWord }) => {
         {Array.from(Array(3), (e, i) => {
           return (
             <div className='row' key={i}>
-              <div className='input-field'>
+              <div>
+                <label htmlFor='exmples' className='active'>
+                  Example {i + 1}
+                </label>
                 <input
                   type='text'
                   name='examples'
                   value={examples[i]}
                   onChange={updateExamplesChanged(i)}
                 />
-                <label htmlFor='exmples' className='active'>
-                  Example {i + 1}
-                </label>
               </div>
             </div>
           );
@@ -170,13 +181,17 @@ const AddWordModal = ({ addWord }) => {
   );
 };
 
-AddWordModal.propTypes = {
-  addWord: PropTypes.func.isRequired
+EditWordModal.propTypes = {
+  updateWord: PropTypes.func.isRequired
 };
+
+const mapStateToProps = state => ({
+  current: state.word.current
+});
 
 const modalStyle = {
   width: '75%',
   height: '75%'
 };
 
-export default connect(null, { addWord })(AddWordModal);
+export default connect(mapStateToProps, { updateWord })(EditWordModal);

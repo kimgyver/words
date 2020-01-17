@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import WordItem from './WordItem';
 import Preloader from './layout/Preloader';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { getWords } from '../actions/wordActions';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 const Words = ({ word: { words, loading }, getWords }) => {
   // const [words, setWords] = useState();
@@ -17,6 +18,7 @@ const Words = ({ word: { words, loading }, getWords }) => {
     //   });
 
     getWords();
+    // eslint-disable-next-line
   }, []);
 
   // useEffect(() => {
@@ -141,8 +143,14 @@ const Words = ({ word: { words, loading }, getWords }) => {
     <div>
       <h1>Hello, world!</h1>
       <div className='row'>
-        {words != null &&
-          words.map(word => <WordItem word={word} key={word._id} />)}
+        <TransitionGroup>
+          {words != null &&
+            words.map(word => (
+              <CSSTransition key={word._id} timeout={500} classNames='item'>
+                <WordItem word={word} key={word._id} />
+              </CSSTransition>
+            ))}
+        </TransitionGroup>
       </div>
     </div>
   );

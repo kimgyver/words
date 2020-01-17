@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { deleteWord } from '../../actions/wordActions';
@@ -7,8 +7,11 @@ import M from 'materialize-css/dist/js/materialize.min.js';
 const DeleteWordModal = ({ current, deleteWord }) => {
   const [textWord, setTextWord] = useState('');
 
+  const onClose = () => {
+    setTextWord('');
+  };
+
   const onSubmit = () => {
-    console.log(current);
     if (textWord === '') {
       M.toast({
         html: 'Please exactly enter the word to be deleted.'
@@ -57,9 +60,16 @@ const DeleteWordModal = ({ current, deleteWord }) => {
           <a
             href='#!'
             onClick={onSubmit}
-            className='modal-close waves-effect blue waves-light btn'
+            className='modal-close waves-effect red waves-orange btn'
           >
-            Enter
+            Delete
+          </a>{' '}
+          <a
+            href='#!'
+            onClick={onClose}
+            className='modal-close waves-effect grey waves-light btn'
+          >
+            Close
           </a>
         </div>
       </div>
