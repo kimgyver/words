@@ -88,11 +88,54 @@
   background: #ffff66; /* Selection color, Gecko Browsers */
 }
 
+.root-container {
+  margin: 0 50px 0 50px;
+}
+
+#setting-modal {
+  width: 65%;
+  height: 90%;
+}
+
+#setting-modal .title {
+  display: none;
+}
+
+#setting-modal label {
+  font-size: 1rem;
+  color: blue;
+}
+
+#delete-word-modal {
+  width: 50%;
+  height: 50%;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .root-container {
+    margin: 0 35px 0 35px;
+  }
+
+  .toggle-colomn-count {
+    display: none;
+  }
+
+  #setting-modal {
+    width: 90%;
+    height: 90%;
+  }
+
+  #delete-word-modal {
+    width: 70%;
+    height: 60%;
   }
 }

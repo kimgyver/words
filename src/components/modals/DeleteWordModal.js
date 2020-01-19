@@ -35,7 +35,7 @@ const DeleteWordModal = ({ current, deleteWord }) => {
   };
 
   return (
-    <div id='delete-word-modal' className='modal' style={modalStyle}>
+    <div id='delete-word-modal' className='modal'>
       <div className='modal-content'>
         <h4>Delete word </h4>
         <h5>
@@ -85,10 +85,5 @@ DeleteWordModal.propTypes = {
 const mapStateToProps = state => ({
   current: state.word.current
 });
-
-const modalStyle = {
-  width: '50%',
-  height: '50%'
-};
 
 export default connect(mapStateToProps, { deleteWord })(DeleteWordModal);

@@ -53,11 +53,9 @@ const SettingModal = () => {
   };
 
   return (
-    <div id='setting-modal' className='modal' style={modalStyle}>
+    <div id='setting-modal' className='modal'>
       <div className='modal-content'>
-        <h4>Setting</h4>
-
-        <h5>Display Order</h5>
+        <h4>Display Order</h4>
 
         <div className='row'>
           <div>
@@ -163,11 +161,6 @@ const SettingModal = () => {
       </div>
     </div>
   );
-};
-
-const modalStyle = {
-  width: '60%',
-  height: '90%'
 };
 
 export default SettingModal;

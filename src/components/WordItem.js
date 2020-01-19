@@ -113,7 +113,6 @@ const WordItem = ({ word, setCurrent, filterString, columnNumber }) => {
               {/* CHANGE PRIORITY Button */}
               <a
                 href='#!'
-                className='modal-trigger'
                 onClick={() => {
                   setCurrent(word);
                   priorityChanageble

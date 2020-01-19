@@ -23,7 +23,7 @@ function App() {
     <Provider store={store}>
       <Fragment>
         <SearchBar />
-        <div style={{ margin: '0 50px 0 50px' }}>
+        <div className='root-container'>
           <AddBtn />
           <DeleteWordModal />
           <AddWordModal />

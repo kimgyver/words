@@ -39,6 +39,14 @@ const SearchBar = ({ filterWords, clearFilter, toggleColumnNumber }) => {
               ref={text}
               onChange={onChange}
               placeholder='Search Words...'
+              className='searchBarInput'
+              style={{
+                paddingLeft: window.innerWidth > 500 ? '3rem' : '1rem',
+                width:
+                  window.innerWidth > 500
+                    ? 'calc(100% - 3rem)'
+                    : 'calc(100% - 1rem)'
+              }}
             />
 
             {/* X Button */}
@@ -57,16 +65,14 @@ const SearchBar = ({ filterWords, clearFilter, toggleColumnNumber }) => {
         </form>
 
         {/* Toggle column count Button */}
-        {/* disable mobile */}
-        {window.innerWidth > 500 && (
-          <div>
-            <a href='#!' onClick={toggleColumnNumber}>
-              <i className='material-icons' style={iconStyle}>
-                sync_alt
-              </i>
-            </a>
-          </div>
-        )}
+        {/* disable on mobile -> css */}
+        <div className='toggle-colomn-count'>
+          <a href='#!' onClick={toggleColumnNumber}>
+            <i className='material-icons' style={iconStyle}>
+              sync_alt
+            </i>
+          </a>
+        </div>
 
         {/* Setting Button */}
         <div>
