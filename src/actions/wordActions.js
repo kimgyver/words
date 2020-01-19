@@ -53,8 +53,8 @@ export const getWords = () => async dispatch => {
       }
     }
 
-    console.log(`${serverUrl()}/api/words?${param}`);
-    const res = await fetch(`${serverUrl()}/api/words?${param}`);
+    console.log(`${serverUrl()}?${param}`);
+    const res = await fetch(`${serverUrl()}?${param}`);
     const data = await res.json();
 
     dispatch({
@@ -76,7 +76,7 @@ export const addWord = word => async dispatch => {
   try {
     setLoading();
 
-    const res = await fetch(`${serverUrl()}/api/words`, {
+    const res = await fetch(`${serverUrl()}`, {
       method: 'POST',
       body: JSON.stringify(word),
       headers: {
@@ -102,7 +102,7 @@ export const deleteWord = _id => async dispatch => {
   try {
     setLoading();
 
-    await fetch(`${serverUrl()}/api/words/${_id}`, {
+    await fetch(`${serverUrl()}/${_id}`, {
       method: 'DELETE'
     });
 
@@ -123,7 +123,7 @@ export const updateWord = word => async dispatch => {
   try {
     setLoading();
 
-    const res = await fetch(`${serverUrl()}/api/words/${word._id}`, {
+    const res = await fetch(`${serverUrl()}/${word._id}`, {
       method: 'PUT',
       body: JSON.stringify(word),
       headers: {
