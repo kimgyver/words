@@ -8,3 +8,6 @@ export const CLEAR_WORDS = 'CLEAR_WORDS';
 export const SET_LOADING = 'SET_LOADING';
 export const WORDS_ERROR = 'WORDS_ERROR';
 export const SEARCH_WORDS = 'SEARCH_WORDS';
+export const FILTER_WORDS = 'FILTER_WORDS';
+export const CLEAR_FILTER = 'CLEAR_FILTER';
+export const TOGGLE_COLMUN_NUMBER = 'TOGGLE_COLMUN_NUMBER';

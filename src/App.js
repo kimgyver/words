@@ -3,7 +3,9 @@ import AddBtn from './components/layout/AddBtn';
 import AddWordModal from './components/modals/AddWordModal';
 import EditWordModal from './components/modals/EditWordModal';
 import DeleteWordModal from './components/modals/DeleteWordModal';
+import SettingModal from './components/modals/SettingModal';
 import Words from './components/Words';
+import SearchBar from './components/layout/SearchBar';
 import './App.css';
 import { Provider } from 'react-redux';
 import store from './store';
@@ -20,12 +22,13 @@ function App() {
   return (
     <Provider store={store}>
       <Fragment>
-        {/* <SearchBar /> */}
+        <SearchBar />
         <div style={{ margin: '0 50px 0 50px' }}>
           <AddBtn />
           <DeleteWordModal />
           <AddWordModal />
           <EditWordModal />
+          <SettingModal />
           <Words />
         </div>
       </Fragment>

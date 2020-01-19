@@ -7,14 +7,22 @@ import {
   UPDATE_WORD,
   SEARCH_WORDS,
   SET_CURRENT,
-  CLEAR_CURRENT
+  CLEAR_CURRENT,
+  FILTER_WORDS,
+  CLEAR_FILTER,
+  TOGGLE_COLMUN_NUMBER
 } from '../actions/types';
+
+const MAX_COLUMN_NUMBER = 4;
 
 const initialState = {
   words: null,
   current: null,
   loading: false,
-  error: null
+  error: null,
+  filtered: null,
+  filterString: null,
+  columnNumber: 3
 };
 
 export default (state = initialState, action) => {
@@ -59,6 +67,37 @@ export default (state = initialState, action) => {
         ...state,
         current: null
       };
+
+    case FILTER_WORDS:
+      return {
+        ...state,
+        filterString: action.payload,
+        filtered: state.words.filter(word => {
+          const regex = new RegExp(`${action.payload}`, 'gi');
+          return (
+            word.text.match(regex) ||
+            word.definition.match(regex) ||
+            word.synonyms.match(regex) ||
+            word.examples.reduce(
+              (prevMatched, example) => prevMatched || example.match(regex),
+              false
+            )
+          );
+        })
+      };
+    case CLEAR_FILTER:
+      return {
+        ...state,
+        filterString: null,
+        filtered: null
+      };
+    case TOGGLE_COLMUN_NUMBER:
+      return {
+        ...state,
+        columnNumber:
+          state.columnNumber < MAX_COLUMN_NUMBER ? state.columnNumber + 1 : 1
+      };
+
     case SET_LOADING:
       return {
         ...state,

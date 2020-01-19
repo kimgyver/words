@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { setCurrent } from '../actions/wordActions';
@@ -6,7 +6,9 @@ import PriorityBtn from './layout/PriorityBtn';
 
 // import V from './voicerss-tts.min.js';
 
-const WordItem = ({ word, setCurrent }) => {
+const WordItem = ({ word, setCurrent, filterString, columnNumber }) => {
+  const [priorityChanageble, setPriorityChanageble] = useState(false);
+
   //   const tts = text => {
   //     V.VoiceRSS.speech({
   //       key: '2c13f968d9cb41cda2f4095c9a22048b',
@@ -46,19 +48,60 @@ const WordItem = ({ word, setCurrent }) => {
   }
   bgClass += ' darken-1';
 
+  /**
+   * Find and highlight relevant keywords within a block of text
+   * @param  {string} label - The text to parse
+   * @param  {string} value - The search keyword to highlight
+   * @return {object} A JSX object containing an array of alternating strings and JSX
+   */
+  const highlightedText = (text, pattern) => {
+    const splitText = text.split(pattern);
+
+    if (splitText.length <= 1) {
+      return text;
+    }
+
+    const matches = text.match(pattern);
+
+    return splitText.reduce(
+      (arr, element, index) =>
+        matches[index]
+          ? [...arr, element, <mark key={index}>{matches[index]}</mark>]
+          : [...arr, element],
+      []
+    );
+  };
+
+  const getClassByColumnNumber = () => {
+    switch (columnNumber) {
+      case 1:
+        return 'm12';
+      case 2:
+        return 'm6';
+      case 3:
+        return 'm4';
+      case 4:
+        return 'm3';
+      default:
+        return 'm4';
+    }
+  };
+
   return (
-    <div className='col s12 m4'>
+    <div className={`col s12 ${getClassByColumnNumber()}`}>
       <div className={bgClass}>
         <div className={fontClass}>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            {/* word.text */}
             <span className='card-title'>
-              {word.text}{' '}
+              {highlightedText(word.text, filterString)}
               <a href='#!' onClick={() => window.tts(word.text)}>
                 <i className='tiny material-icons'>play_circle_outline</i>
               </a>
             </span>
 
             <div>
+              {/* EDIT Button */}
               <a
                 href='#edit-word-modal'
                 className='modal-trigger'
@@ -67,8 +110,21 @@ const WordItem = ({ word, setCurrent }) => {
                 <i className='small material-icons'>edit</i>
               </a>
 
-              {/* <PriorityBtn /> */}
-              <i className='small material-icons'>swap_vertical_circle</i>
+              {/* CHANGE PRIORITY Button */}
+              <a
+                href='#!'
+                className='modal-trigger'
+                onClick={() => {
+                  setCurrent(word);
+                  priorityChanageble
+                    ? setPriorityChanageble(false)
+                    : setPriorityChanageble(true);
+                }}
+              >
+                <i className='small material-icons'>swap_vertical_circle</i>
+              </a>
+
+              {/* DELETE Button */}
               <a
                 href='#delete-word-modal'
                 className='modal-trigger'
@@ -79,9 +135,19 @@ const WordItem = ({ word, setCurrent }) => {
             </div>
           </div>
 
+          {/* CHANGE PRIORITY 1,2,3 Button */}
+          {priorityChanageble ? (
+            <PriorityBtn
+              word={word}
+              setPriorityChanageble={setPriorityChanageble}
+            />
+          ) : null}
+
           <div>
-            {word.definition}
+            {/* word.definition */}
+            {highlightedText(word.definition, filterString)}
             <br></br>
+            {/* word.synonyms */}
             {word.synonyms && (
               <div>
                 = <u>{word.synonyms}</u>{' '}
@@ -92,10 +158,11 @@ const WordItem = ({ word, setCurrent }) => {
             )}
           </div>
 
+          {/* word.examples */}
           {word.examples.map((ex, i) => (
             <li key={i}>
               <i>
-                {ex} {}
+                {highlightedText(ex, filterString)}
                 <a href='#!' onClick={() => window.tts(ex)}>
                   <i className='tiny material-icons'>play_circle_outline</i>
                 </a>
@@ -110,7 +177,14 @@ const WordItem = ({ word, setCurrent }) => {
 
 WordItem.propTypes = {
   word: PropTypes.object.isRequired,
-  setCurrent: PropTypes.func.isRequired
+  setCurrent: PropTypes.func.isRequired,
+  filterString: PropTypes.string,
+  columnNumber: PropTypes.number.isRequired
 };
 
-export default connect(null, { setCurrent })(WordItem);
+const mapStateToProps = state => ({
+  filterString: state.word.filterString,
+  columnNumber: state.word.columnNumber
+});
+
+export default connect(mapStateToProps, { setCurrent })(WordItem);

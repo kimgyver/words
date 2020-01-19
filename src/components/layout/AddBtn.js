@@ -9,7 +9,7 @@ const AddBtn = () => {
       >
         <i className='large material-icons'>add</i>
       </a>
-      <ul>
+      {/* <ul>
         <li>
           <a
             href='#tech-list-modal'
@@ -23,7 +23,7 @@ const AddBtn = () => {
             <i className='material-icons'>person_add</i>
           </a>
         </li>
-      </ul>
+      </ul> */}
     </div>
   );
 };

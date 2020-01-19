@@ -6,17 +6,8 @@ import PropTypes from 'prop-types';
 import { getWords } from '../actions/wordActions';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
-const Words = ({ word: { words, loading }, getWords }) => {
-  // const [words, setWords] = useState();
-
+const Words = ({ word: { words, loading, filtered }, getWords }) => {
   useEffect(() => {
-    // fetch('http://localhost:5000/api/words')
-    //   .then(res => res.json())
-    //   .then(json => {
-    //     console.log(json);
-    //     setWords(json);
-    //   });
-
     getWords();
     // eslint-disable-next-line
   }, []);
@@ -139,13 +130,15 @@ const Words = ({ word: { words, loading }, getWords }) => {
     return <Preloader />;
   }
 
+  const wordsForHere = filtered ? filtered : words;
+  //const wordsForHere = words;
+
   return (
     <div>
-      <h1>Hello, world!</h1>
       <div className='row'>
         <TransitionGroup>
-          {words != null &&
-            words.map(word => (
+          {wordsForHere != null &&
+            wordsForHere.map(word => (
               <CSSTransition key={word._id} timeout={500} classNames='item'>
                 <WordItem word={word} key={word._id} />
               </CSSTransition>
@@ -166,5 +159,3 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, { getWords })(Words);
-
-// export default Words;

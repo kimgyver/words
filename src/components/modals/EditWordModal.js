@@ -59,10 +59,10 @@ const EditWordModal = ({ current, updateWord }) => {
   };
 
   const updateExamplesChanged = index => e => {
-    let newArr = [...examples]; // copying the old datas array
-    newArr[index] = e.target.value; // replace e.target.value with whatever you want to change it to
-    // console.log('Result:', newArr);
-    setExamples(newArr);
+    let arr = [...examples]; // copying the old datas array
+    arr[index] = e.target.value; // replace e.target.value with whatever you want to change it to
+    // console.log('Result:', arr);
+    setExamples(arr);
   };
 
   const onClose = () => {

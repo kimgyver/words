@@ -51,12 +51,12 @@
         });
       }
 
-      const textIt = window => {
+      function textIt(window) {
         //   const prevSibling = window.parentNode.childNodes[0];
         const prevSibling = window.previousSibling;
         const text = prevSibling.textContent.replace(/(\r\n|\n|\r)/gm, ' ');
         tts(text);
-      };
+      }
     </script>
     <title>React App</title>
   </head>

@@ -7,8 +7,13 @@ import {
   UPDATE_WORD,
   SEARCH_WORDS,
   SET_CURRENT,
-  CLEAR_CURRENT
+  CLEAR_CURRENT,
+  FILTER_WORDS,
+  CLEAR_FILTER,
+  TOGGLE_COLMUN_NUMBER
 } from './types';
+
+import { serverUrl } from '../env';
 
 // export const getWords = () => {
 //     return async (dispatch) => {
@@ -29,7 +34,27 @@ export const getWords = () => async dispatch => {
   try {
     setLoading();
 
-    const res = await fetch('http://localhost:5000/api/words');
+    let param = '';
+    let savedSetting = localStorage.getItem('wordOrderSetting');
+    if (savedSetting !== null) {
+      savedSetting = JSON.parse(savedSetting);
+      if (savedSetting.randomOrder) {
+        param = 'random=true';
+      } else {
+        if (savedSetting.order1 !== null && savedSetting.order1 !== '') {
+          param += `order1=${savedSetting.order1}&`;
+        }
+        if (savedSetting.order2 !== null && savedSetting.order2 !== '') {
+          param += `order2=${savedSetting.order2}&`;
+        }
+        if (savedSetting.order3 !== null && savedSetting.order3 !== '') {
+          param += `order3=${savedSetting.order3}`;
+        }
+      }
+    }
+
+    console.log(`${serverUrl()}/api/words?${param}`);
+    const res = await fetch(`${serverUrl()}/api/words?${param}`);
     const data = await res.json();
 
     dispatch({
@@ -37,6 +62,8 @@ export const getWords = () => async dispatch => {
       payload: data
     });
   } catch (err) {
+    console.log(err);
+    console.log(process.env);
     dispatch({
       type: WORDS_ERROR,
       payload: err.response.statusText
@@ -49,7 +76,7 @@ export const addWord = word => async dispatch => {
   try {
     setLoading();
 
-    const res = await fetch('http://localhost:5000/api/words', {
+    const res = await fetch(`${serverUrl()}/api/words`, {
       method: 'POST',
       body: JSON.stringify(word),
       headers: {
@@ -75,7 +102,7 @@ export const deleteWord = _id => async dispatch => {
   try {
     setLoading();
 
-    await fetch(`http://localhost:5000/api/words/${_id}`, {
+    await fetch(`${serverUrl()}/api/words/${_id}`, {
       method: 'DELETE'
     });
 
@@ -96,7 +123,7 @@ export const updateWord = word => async dispatch => {
   try {
     setLoading();
 
-    const res = await fetch(`http://localhost:5000/api/words/${word._id}`, {
+    const res = await fetch(`${serverUrl()}/api/words/${word._id}`, {
       method: 'PUT',
       body: JSON.stringify(word),
       headers: {
@@ -150,6 +177,28 @@ export const setCurrent = word => {
 export const clearCurrent = () => {
   return {
     type: CLEAR_CURRENT
+  };
+};
+
+// Filter words
+export const filterWords = filter => {
+  return {
+    type: FILTER_WORDS,
+    payload: filter
+  };
+};
+
+// Clear filter
+export const clearFilter = () => {
+  return {
+    type: CLEAR_FILTER
+  };
+};
+
+// Toggle Column number
+export const toggleColumnNumber = () => {
+  return {
+    type: TOGGLE_COLMUN_NUMBER
   };
 };
 
