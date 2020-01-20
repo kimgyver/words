@@ -10,7 +10,10 @@ import {
   CLEAR_CURRENT,
   FILTER_WORDS,
   CLEAR_FILTER,
-  TOGGLE_COLMUN_NUMBER
+  TOGGLE_COLMUN_NUMBER,
+  SELECT_CANDIDATES_DICTIONARY,
+  SELECT_DICTIONARY,
+  CLEAR_DICTIONARY
 } from './types';
 
 import { serverUrl } from '../env';
@@ -199,6 +202,29 @@ export const clearFilter = () => {
 export const toggleColumnNumber = () => {
   return {
     type: TOGGLE_COLMUN_NUMBER
+  };
+};
+
+// Select candidates Dictionary
+export const selectCandidatesDictionary = dictionaries => {
+  return {
+    type: SELECT_CANDIDATES_DICTIONARY,
+    payload: dictionaries
+  };
+};
+
+// Select Dictionary
+export const selectDictionary = dictionaries => {
+  return {
+    type: SELECT_DICTIONARY,
+    payload: dictionaries
+  };
+};
+
+// Clear Dictionary
+export const clearDictionary = () => {
+  return {
+    type: CLEAR_DICTIONARY
   };
 };
 

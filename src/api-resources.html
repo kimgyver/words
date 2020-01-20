@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+      Dictionary
+      <ul>
+        <li>https://www.wordsapi.com/#try</li>
+        <pre>
+          let result = {
+            word: 'happy',
+            results: [
+              {
+                definition: 'marked by good fortune',
+                partOfSpeech: 'adjective',
+                synonyms: ['felicitous', 'aaaaa'],
+                similarTo: ['fortunate'],
+                derivation: ['happiness'],
+                examples: ['a happy outcome']
+              },
+              {
+                definition: 'well expressed and to the point',
+                partOfSpeech: 'adjective',
+                synonyms: ['well-chosen'],
+                similarTo: ['felicitous'],
+                examples: ['a happy turn of phrase']
+              },
+              {
+                definition: 'eagerly disposed to act or to be of service',
+                partOfSpeech: 'adjective',
+                synonyms: ['glad'],
+                similarTo: ['willing']
+              },
+              {
+                definition: 'enjoying or showing or marked by joy or pleasure',
+                partOfSpeech: 'adjective',
+                also: [
+                  'felicitous',
+                  'cheerful',
+                  'content',
+                  'contented',
+                  'elated',
+                  'euphoric',
+                  'glad',
+                  'joyful',
+                  'joyous'
+                ],
+                attribute: ['happiness', 'felicity'],
+                similarTo: [
+                  'blessed',
+                  'prosperous',
+                  'halcyon',
+                  'riant',
+                  'laughing',
+                  'blissful',
+                  'bright',
+                  'golden'
+                ],
+                antonyms: ['unhappy'],
+                derivation: ['happiness'],
+                examples: [
+                  'a happy smile',
+                  'spent many happy days on the beach',
+                  'a happy marriage'
+                ]
+              }
+            ],
+            syllables: {
+              count: 2,
+              list: ['hap', 'py']
+            },
+            pronunciation: {
+              all: "'hæpi"
+            },
+            frequency: 5.58
+          };
+        
+        </pre>
+        <li>https://developer.oxforddictionaries.com/</li>
+        <li>https://krdict.korean.go.kr/openApi/openApiInfo</li>
+        <li></li>
+      </ul>
+    </div>
+    <div>
+      TTS (Text To Speech)
+      <ul>
+        <li>https://www.vocalware.com/index/demo</li>
+        <li>https://www.ispeech.org/developers</li>
+        <li>http://www.voicerss.org/api/demo.aspx</li>
+        <li>
+          <!-- <a
+            href="http://api.voicerss.org/?key=2c13f968d9cb41cda2f4095c9a22048b&hl=en-gb&src=Hello, world! The terminals are all housed within the same building, connected by linking buildings.The terminals are all housed within the same building, connected by linking buildings."
+            >TTS test</a
+          > -->
+          <a
+            href="#"
+            onclick="tts('world! The terminals are all housed within the same building, connected by linking buildings.The terminals are all housed within the same building, connected by linking buildings.')"
+            >TTS Test1</a
+          >
+        </li>
+      </ul>
+    </div>
+    <div>
+      Vector Icon
+      <ul>
+        <li>https://www.flaticon.com/free-icon/play-button_679688</li>
+        <li></li>
+      </ul>
+    </div>
+    <script src="voicerss-tts.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -4,6 +4,7 @@ import AddWordModal from './components/modals/AddWordModal';
 import EditWordModal from './components/modals/EditWordModal';
 import DeleteWordModal from './components/modals/DeleteWordModal';
 import SettingModal from './components/modals/SettingModal';
+import SelectDictionaryModal from './components/modals/SelectDictonaryModal';
 import Words from './components/Words';
 import SearchBar from './components/layout/SearchBar';
 import './App.css';
@@ -29,6 +30,7 @@ function App() {
           <AddWordModal />
           <EditWordModal />
           <SettingModal />
+          <SelectDictionaryModal />
           <Words />
         </div>
       </Fragment>

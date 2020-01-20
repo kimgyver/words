@@ -10,7 +10,10 @@ import {
   CLEAR_CURRENT,
   FILTER_WORDS,
   CLEAR_FILTER,
-  TOGGLE_COLMUN_NUMBER
+  TOGGLE_COLMUN_NUMBER,
+  SELECT_CANDIDATES_DICTIONARY,
+  SELECT_DICTIONARY,
+  CLEAR_DICTIONARY
 } from '../actions/types';
 
 const MAX_COLUMN_NUMBER = 4;
@@ -22,7 +25,9 @@ const initialState = {
   error: null,
   filtered: null,
   filterString: null,
-  columnNumber: 3
+  columnNumber: 3,
+  candidatesDictionaries: null,
+  dictionaries: null
 };
 
 export default (state = initialState, action) => {
@@ -97,7 +102,21 @@ export default (state = initialState, action) => {
         columnNumber:
           state.columnNumber < MAX_COLUMN_NUMBER ? state.columnNumber + 1 : 1
       };
-
+    case SELECT_CANDIDATES_DICTIONARY:
+      return {
+        ...state,
+        candidatesDictionaries: action.payload
+      };
+    case SELECT_DICTIONARY:
+      return {
+        ...state,
+        dictionaries: action.payload
+      };
+    case CLEAR_DICTIONARY:
+      return {
+        ...state,
+        dictionaries: null
+      };
     case SET_LOADING:
       return {
         ...state,

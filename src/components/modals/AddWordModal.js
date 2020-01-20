@@ -1,15 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { addWord } from '../../actions/wordActions';
+import {
+  addWord,
+  clearDictionary,
+  selectCandidatesDictionary
+} from '../../actions/wordActions';
 import M from 'materialize-css/dist/js/materialize.min.js';
 
-const AddWordModal = ({ addWord }) => {
+const AddWordModal = ({
+  addWord,
+  dictionaries,
+  selectCandidatesDictionary,
+  clearDictionary
+}) => {
   const [text, setText] = useState('');
   const [definition, setDefinition] = useState('');
   const [synonyms, setSynonyms] = useState('');
   const [priority, setPriority] = useState('3');
   const [examples, setExamples] = useState([]);
+
+  useEffect(() => {
+    if (dictionaries) {
+      let dicDefinition = dictionaries.options.map(o => o.definition);
+      dicDefinition = dicDefinition.join(', ');
+      setDefinition(dicDefinition);
+
+      let dicSynoyms = dictionaries.options.map(o =>
+        o.synonyms ? o.synonyms.join(', ') : null
+      );
+      dicSynoyms = dicSynoyms.join(', ');
+      setSynonyms(dicSynoyms);
+
+      let dicExamples = [];
+      dictionaries.options.map(o =>
+        o.examples ? dicExamples.push(o.examples) : null
+      );
+      dicExamples = dicExamples.flat(2);
+      dicExamples = dicExamples.slice(0, 3);
+
+      // console.log(dicExamples);
+
+      setExamples(dicExamples);
+
+      // clearDictionary();
+    }
+  }, [dictionaries]);
 
   const onSubmit = () => {
     if (text === '') {
@@ -64,10 +100,53 @@ const AddWordModal = ({ addWord }) => {
     setPriority('3');
   };
 
+  const setSearchWord = () => {
+    let wi = document.querySelector('#searching-word');
+    wi.value = text;
+
+    fetch(`https://wordsapiv1.p.rapidapi.com/words/${text}`, {
+      method: 'GET',
+      headers: {
+        'x-rapidapi-host': 'wordsapiv1.p.rapidapi.com',
+        'x-rapidapi-key': '138917d89bmsh539ba95c3187cf1p11aa19jsnc9da532bef6e'
+      }
+    })
+      .then(response => {
+        console.log(response);
+        return response.json();
+      })
+      .then(json => {
+        // console.log('json:', json);
+        console.log('json.results:', json.results);
+        selectCandidatesDictionary(json.results);
+        if (json.results === null || json.results === undefined) {
+          M.toast({
+            html: 'Nothing is looked up.'
+          });
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
   return (
     <div id='add-word-modal' className='modal' style={modalStyle}>
       <div className='modal-content'>
-        <h4>Add Word</h4>
+        <div>
+          <h4>Add Word</h4>
+        </div>
+        <div>
+          {text.length > 2 && (
+            <a
+              href='#select-dictionary-modal'
+              onClick={setSearchWord}
+              className='modal-trigger'
+            >
+              OPEN DICTIONARY
+            </a>
+          )}
+        </div>
         <div className='row'>
           <div className='input-field'>
             <input
@@ -174,9 +253,17 @@ AddWordModal.propTypes = {
   addWord: PropTypes.func.isRequired
 };
 
+const mapStateToProps = state => ({
+  dictionaries: state.word.dictionaries
+});
+
 const modalStyle = {
   width: '75%',
   height: '75%'
 };
 
-export default connect(null, { addWord })(AddWordModal);
+export default connect(mapStateToProps, {
+  addWord,
+  selectCandidatesDictionary,
+  clearDictionary
+})(AddWordModal);
