@@ -206,11 +206,30 @@ export const toggleColumnNumber = () => {
 };
 
 // Select candidates Dictionary
-export const selectCandidatesDictionary = dictionaries => {
-  return {
-    type: SELECT_CANDIDATES_DICTIONARY,
-    payload: dictionaries
-  };
+export const selectCandidatesDictionary = text => async dispatch => {
+  setLoading();
+
+  try {
+    const res = await fetch(`https://wordsapiv1.p.rapidapi.com/words/${text}`, {
+      method: 'GET',
+      headers: {
+        'x-rapidapi-host': 'wordsapiv1.p.rapidapi.com',
+        'x-rapidapi-key': '138917d89bmsh539ba95c3187cf1p11aa19jsnc9da532bef6e'
+      }
+    });
+    const json = await res.json();
+    console.log('json.results:', json.results);
+
+    dispatch({
+      type: SELECT_CANDIDATES_DICTIONARY,
+      payload: json.results
+    });
+  } catch (err) {
+    dispatch({
+      type: WORDS_ERROR,
+      payload: err.response.statusText
+    });
+  }
 };
 
 // Select Dictionary

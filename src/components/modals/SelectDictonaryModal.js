@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import Preloader from '../layout/Preloader';
 import { connect } from 'react-redux';
 import { selectDictionary } from '../../actions/wordActions';
 
 const SelectDictionaryModal = ({
   candidatesDictionaries,
-  selectDictionary
+  selectDictionary,
+  loading
 }) => {
   const [options, setOptions] = useState([]);
   const [searchingWord, setSearchingWord] = useState('');
@@ -44,12 +46,24 @@ const SelectDictionaryModal = ({
       options.map(i => candidatesDictionaries[i])
     );
     selectDictionary({ options: options.map(i => candidatesDictionaries[i]) });
+
+    // Clear Fields
+    deselectAll();
+    setOptions([]);
   };
 
   const onClose = () => {
     // Clear Fields
-    //
+    deselectAll();
+    setOptions([]);
   };
+
+  const deselectAll = () => {
+    const checkArr = Array.from(window.document.querySelectorAll('#dic'));
+    checkArr.forEach(c => (c.checked = false));
+  };
+
+  if (loading) return <Preloader />;
 
   return (
     <div id='select-dictionary-modal' className='modal'>
@@ -62,7 +76,7 @@ const SelectDictionaryModal = ({
           onChange={e => setSearchingWord(e.target.value)}
         />
 
-        <div>
+        <div id='dic-checkboxs'>
           {candidatesDictionaries === null ||
           candidatesDictionaries === undefined ? (
             <div>
@@ -75,19 +89,21 @@ const SelectDictionaryModal = ({
                   <label>
                     <input
                       name='dic'
+                      id='dic'
                       type='checkbox'
+                      className='filled-in'
                       value={index}
                       //checked={this.state.dics[index]}
                       onChange={onChange}
                     />
-                    <span>{r.definition}</span>
+                    <span style={{ overflow: 'auto' }}>{r.definition}</span>
                   </label>
                 </div>
               </div>
             ))
           )}
 
-          <div className='modal-footer'>
+          <div className='modal-footer' style={{ marginTop: '4rem' }}>
             <a
               href='#!'
               onClick={onSubmit}
@@ -115,7 +131,8 @@ const modalStyle = {
 };
 
 const mapStateToProps = state => ({
-  candidatesDictionaries: state.word.candidatesDictionaries
+  candidatesDictionaries: state.word.candidatesDictionaries,
+  loading: state.word.loading
 });
 
 export default connect(mapStateToProps, { selectDictionary })(

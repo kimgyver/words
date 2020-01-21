@@ -88,7 +88,8 @@ export default (state = initialState, action) => {
               false
             )
           );
-        })
+        }),
+        loading: false
       };
     case CLEAR_FILTER:
       return {
@@ -105,12 +106,14 @@ export default (state = initialState, action) => {
     case SELECT_CANDIDATES_DICTIONARY:
       return {
         ...state,
-        candidatesDictionaries: action.payload
+        candidatesDictionaries: action.payload,
+        loading: false
       };
     case SELECT_DICTIONARY:
       return {
         ...state,
-        dictionaries: action.payload
+        dictionaries: action.payload,
+        loading: false
       };
     case CLEAR_DICTIONARY:
       return {

@@ -21,7 +21,7 @@ const AddWordModal = ({
   const [examples, setExamples] = useState([]);
 
   useEffect(() => {
-    if (dictionaries) {
+    if (dictionaries !== null && dictionaries !== undefined) {
       let dicDefinition = dictionaries.options.map(o => o.definition);
       dicDefinition = dicDefinition.join(', ');
       setDefinition(dicDefinition);
@@ -104,91 +104,73 @@ const AddWordModal = ({
     let wi = document.querySelector('#searching-word');
     wi.value = text;
 
-    fetch(`https://wordsapiv1.p.rapidapi.com/words/${text}`, {
-      method: 'GET',
-      headers: {
-        'x-rapidapi-host': 'wordsapiv1.p.rapidapi.com',
-        'x-rapidapi-key': '138917d89bmsh539ba95c3187cf1p11aa19jsnc9da532bef6e'
-      }
-    })
-      .then(response => {
-        console.log(response);
-        return response.json();
-      })
-      .then(json => {
-        // console.log('json:', json);
-        console.log('json.results:', json.results);
-        selectCandidatesDictionary(json.results);
-        if (json.results === null || json.results === undefined) {
-          M.toast({
-            html: 'Nothing is looked up.'
-          });
-        }
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    // search from dictionary
+    selectCandidatesDictionary(text);
   };
 
   return (
     <div id='add-word-modal' className='modal' style={modalStyle}>
       <div className='modal-content'>
-        <div>
-          <h4>Add Word</h4>
-        </div>
-        <div>
-          {text.length > 2 && (
-            <a
-              href='#select-dictionary-modal'
-              onClick={setSearchWord}
-              className='modal-trigger'
-            >
-              OPEN DICTIONARY
-            </a>
-          )}
+        <div
+          className='col s12'
+          style={{ display: 'flex', justifyContent: 'space-between' }}
+        >
+          <div>
+            <h4>Add Word</h4>
+          </div>
+          <div>
+            {text.length > 2 && (
+              <a
+                href='#select-dictionary-modal'
+                onClick={setSearchWord}
+                className='modal-trigger'
+              >
+                <i className='small material-icons'>import_contacts</i> LOOKUP
+                DICTIONARY
+              </a>
+            )}
+          </div>
+          <div></div>
+          <div></div>
         </div>
         <div className='row'>
-          <div className='input-field'>
-            <input
-              type='text'
-              name='text'
-              value={text}
-              onChange={e => setText(e.target.value)}
-            />
-            <label htmlFor='text' className='active'>
-              Word
-            </label>
-          </div>
+          <label htmlFor='text' className='active'>
+            Word
+          </label>
+          <input
+            type='text'
+            name='text'
+            value={text}
+            onChange={e => setText(e.target.value)}
+          />
         </div>
 
         <div className='row'>
-          <div className='input-field'>
-            <input
-              type='text'
-              name='definition'
-              value={definition}
-              onChange={e => setDefinition(e.target.value)}
-            />
-            <label htmlFor='definition' className='active'>
-              Definition
-            </label>
-          </div>
+          <label htmlFor='definition' className='active'>
+            Definition
+          </label>
+          <input
+            type='text'
+            name='definition'
+            value={definition}
+            onChange={e => setDefinition(e.target.value)}
+          />
         </div>
 
         <div
           className='row'
           style={{ display: 'flex', justifyContent: 'space-between' }}
         >
-          <div className='input-field col s12'>
+          <div className='col s12'>
+            <label htmlFor='synonyms' className='active'>
+              Synonyms
+            </label>
             <input
               type='text'
               name='synonyms'
               value={synonyms}
               onChange={e => setSynonyms(e.target.value)}
             />
-            <label htmlFor='synonyms' className='active'>
-              Synonyms
-            </label>
           </div>
           <div>
             <label htmlFor='priority' className='active'>
@@ -213,17 +195,15 @@ const AddWordModal = ({
         {Array.from(Array(3), (e, i) => {
           return (
             <div className='row' key={i}>
-              <div className='input-field'>
-                <input
-                  type='text'
-                  name='examples'
-                  value={examples[i]}
-                  onChange={updateExamplesChanged(i)}
-                />
-                <label htmlFor='exmples' className='active'>
-                  Example {i + 1}
-                </label>
-              </div>
+              <label htmlFor='exmples' className='active'>
+                Example {i + 1}
+              </label>
+              <input
+                type='text'
+                name='examples'
+                value={examples[i]}
+                onChange={updateExamplesChanged(i)}
+              />
             </div>
           );
         })}
