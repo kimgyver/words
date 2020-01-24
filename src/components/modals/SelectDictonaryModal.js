@@ -125,10 +125,10 @@ const SelectDictionaryModal = ({
   );
 };
 
-const modalStyle = {
-  width: '75%',
-  height: '75%'
-};
+// const modalStyle = {
+//   width: '75%',
+//   height: '75%'
+// };
 
 const mapStateToProps = state => ({
   candidatesDictionaries: state.word.candidatesDictionaries,
