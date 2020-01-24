@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { connect } from 'react-redux';
 import {
   filterWords,
@@ -6,12 +6,28 @@ import {
   toggleColumnNumber
 } from '../../actions/wordActions';
 
+import './SearchBar.scss';
+
 const SearchBar = ({ filterWords, clearFilter, toggleColumnNumber }) => {
   const text = useRef('');
+
+  useEffect(() => {
+    showHideClearButton();
+  }, []);
 
   const onChange = e => {
     //filterWords(e.target.value);
     filterWords(text.current.value);
+    showHideClearButton();
+  };
+
+  const showHideClearButton = () => {
+    const x_window = document.querySelector('.clear-x-button1');
+    if (text.current.value === '') {
+      x_window.style.display = 'none';
+    } else {
+      x_window.style.display = 'block';
+    }
   };
 
   const resetSearchBar = () => {
@@ -51,13 +67,15 @@ const SearchBar = ({ filterWords, clearFilter, toggleColumnNumber }) => {
 
             {/* X Button */}
             <a
+              className='clear-x-button'
               href='#!'
               onClick={() => {
                 resetSearchBar();
                 clearFilter();
+                showHideClearButton();
               }}
             >
-              <i className='material-icons' style={iconStyle}>
+              <i className='material-icons clear-x-button1' style={iconStyle}>
                 close
               </i>
             </a>

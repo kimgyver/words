@@ -7,7 +7,7 @@ import SettingModal from './components/modals/SettingModal';
 import SelectDictionaryModal from './components/modals/SelectDictonaryModal';
 import Words from './components/Words';
 import SearchBar from './components/layout/SearchBar';
-import './App.css';
+import './App.scss';
 import { Provider } from 'react-redux';
 import store from './store';
 

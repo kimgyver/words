@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { deleteWord } from '../../actions/wordActions';
 import M from 'materialize-css/dist/js/materialize.min.js';
 
+import './DeleteWordModal.scss';
+
 const DeleteWordModal = ({ current, deleteWord }) => {
   const [textWord, setTextWord] = useState('');
 

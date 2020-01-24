@@ -1,0 +1,20 @@
+#setting-modal {
+  width: 65%;
+  height: 90%;
+}
+
+#setting-modal .title {
+  display: none;
+}
+
+#setting-modal label {
+  font-size: 1rem;
+  color: blue;
+}
+
+@media only screen and (max-width: 500px) {
+  #setting-modal {
+    width: 90%;
+    height: 90%;
+  }
+}
