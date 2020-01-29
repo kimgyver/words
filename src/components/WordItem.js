@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { setCurrent } from '../actions/wordActions';
 import PriorityBtn from './layout/PriorityBtn';
 
+import './WordItem.css';
 // import V from './voicerss-tts.min.js';
 
 const WordItem = ({ word, setCurrent, filterString, columnNumber }) => {
   const [priorityChanageble, setPriorityChanageble] = useState(false);
+  const playText = useRef();
+  const playDefinition = useRef();
+  const playExample = useRef([]);
 
   //   const tts = text => {
   //     V.VoiceRSS.speech({
@@ -87,6 +91,13 @@ const WordItem = ({ word, setCurrent, filterString, columnNumber }) => {
     }
   };
 
+  const iconChangeWhilePlaying = (playRef, delayTime = 1500) => {
+    playRef.textContent = 'play_circle_filled';
+    setTimeout(() => {
+      playRef.textContent = 'play_circle_outline';
+    }, delayTime);
+  };
+
   return (
     <div className={`col s12 ${getClassByColumnNumber()}`}>
       <div className={bgClass}>
@@ -95,8 +106,19 @@ const WordItem = ({ word, setCurrent, filterString, columnNumber }) => {
             {/* word.text */}
             <span className='card-title'>
               {highlightedText(word.text, filterString)}
-              <a href='#!' onClick={() => window.tts(word.text)}>
-                <i className='tiny material-icons'>play_circle_outline</i>
+              <a
+                href='#!'
+                onClick={() => {
+                  iconChangeWhilePlaying(
+                    playText.current,
+                    word.text.length * 120
+                  );
+                  window.tts(word.text);
+                }}
+              >
+                <i className='tiny material-icons' ref={playText}>
+                  play_circle_outline
+                </i>
               </a>
             </span>
 
@@ -150,8 +172,19 @@ const WordItem = ({ word, setCurrent, filterString, columnNumber }) => {
             {word.synonyms && (
               <div>
                 = <u>{word.synonyms}</u>{' '}
-                <a href='#!' onClick={() => window.tts(word.synonyms)}>
-                  <i className='tiny material-icons'>play_circle_outline</i>
+                <a
+                  href='#!'
+                  onClick={() => {
+                    iconChangeWhilePlaying(
+                      playDefinition.current,
+                      word.synonyms.length * 120
+                    );
+                    window.tts(word.synonyms);
+                  }}
+                >
+                  <i className='tiny material-icons' ref={playDefinition}>
+                    play_circle_outline
+                  </i>
                 </a>
               </div>
             )}
@@ -162,8 +195,22 @@ const WordItem = ({ word, setCurrent, filterString, columnNumber }) => {
             <li key={i}>
               <i>
                 {highlightedText(ex, filterString)}
-                <a href='#!' onClick={() => window.tts(ex)}>
-                  <i className='tiny material-icons'>play_circle_outline</i>
+                <a
+                  href='#!'
+                  onClick={() => {
+                    iconChangeWhilePlaying(
+                      playExample.current[i],
+                      ex.length * 120
+                    );
+                    window.tts(ex);
+                  }}
+                >
+                  <i
+                    className='tiny material-icons'
+                    ref={el => (playExample.current[i] = el)}
+                  >
+                    play_circle_outline
+                  </i>
                 </a>
               </i>
             </li>
