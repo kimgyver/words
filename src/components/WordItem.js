@@ -92,9 +92,11 @@ const WordItem = ({ word, setCurrent, filterString, columnNumber }) => {
   };
 
   const iconChangeWhilePlaying = (playRef, delayTime = 1500) => {
+    playRef.parentElement.classList.add('disabled');
     playRef.textContent = 'play_circle_filled';
     setTimeout(() => {
       playRef.textContent = 'play_circle_outline';
+      playRef.parentElement.classList.remove('disabled');
     }, delayTime);
   };
 
