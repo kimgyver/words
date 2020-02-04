@@ -186,18 +186,28 @@ const SettingModal = ({
               value={friend}
               className='browser-default'
               onChange={e => setFriend(e.target.value)}
-              multiple={false}
             >
               <option value={null} key='0'></option>
               {users &&
                 users.users.map(
                   u =>
+                    // (!user || u._id !== user._id) && (
+                    //   <option value={u._id} key={u._id}>
+                    //     {u.name} ({u.email}) - Vocabulary Count:{' '}
+                    //     {users.wordsCount.map(wc =>
+                    //       wc._id === u._id ? wc.count : null
+                    //     )}
+                    //   </option>
+                    // )
                     (!user || u._id !== user._id) && (
                       <option value={u._id} key={u._id}>
-                        {u.name} ({u.email}) - Vocabulary Count:{' '}
-                        {users.wordsCount.map(wc =>
-                          wc._id === u._id ? wc.count : null
-                        )}
+                        {u.name} ({u.email}):{' '}
+                        {users.wordsCount.reduce(
+                          (acc, wc) =>
+                            wc._id === u._id ? acc + Number(wc.count) : acc + 0,
+                          0
+                        )}{' '}
+                        Vocabularies
                       </option>
                     )
                 )}

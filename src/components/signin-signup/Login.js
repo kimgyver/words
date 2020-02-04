@@ -34,7 +34,7 @@ const Login = ({ login, clearErrors, isAuthenticated, error, history }) => {
       //setAlert('Please fill in all fields', 'danger');
       M.toast({ html: 'Please fill in all fields' });
     } else {
-      console.log(email, password);
+      //console.log(email, password);
       login({
         email,
         password
