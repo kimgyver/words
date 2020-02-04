@@ -2,3 +2,12 @@ a.disabled {
   pointer-events: none;
   cursor: default;
 }
+
+.owner-name {
+  padding: 0.3rem 0.4rem;
+  background: teal;
+  border-radius: 30%;
+  color: #fff;
+  margin-left: 0.3rem;
+  font-size: 1rem;
+}

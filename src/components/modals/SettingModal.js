@@ -1,8 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import M from 'materialize-css/dist/js/materialize.min.js';
+import { connect } from 'react-redux';
 import './SettingModal.scss';
+import { getUsers, updateUser, loadUser } from '../../actions/authActions';
+import Preloader from '../layout/Preloader';
+import M from 'materialize-css/dist/js/materialize.min.js';
 
-const SettingModal = () => {
+const SettingModal = ({
+  user,
+  users,
+  isAuthenticated,
+  loadingWord,
+  loading,
+  updateUser
+}) => {
   const displayOrderOptions = [
     'Priority (1 > 2 > 3)',
     'Updated Time',
@@ -15,6 +25,8 @@ const SettingModal = () => {
   const [order2, setOrder2] = useState(displayOrderOptions[1]);
   const [order3, setOrder3] = useState(displayOrderOptions[2]);
   const [randomOrder, setRandomOrder] = useState(false);
+
+  const [friend, setFriend] = useState([]);
 
   const getSetting = () => {
     // read from localStorage
@@ -31,9 +43,24 @@ const SettingModal = () => {
 
   useEffect(() => {
     getSetting();
-  }, []);
+    if (user && user.friends && user.friends.length > 0) {
+      setFriend(user.friends[0]);
+    }
+  }, [user]);
+
+  if (loading || loadingWord) {
+    return <Preloader />;
+  }
+
+  // console.log(users);
+  // console.log(user);
 
   const onSubmit = () => {
+    if (!isAuthenticated) {
+      M.toast({ html: 'Please log in first.' });
+      return;
+    }
+
     const setting = {
       order1,
       order2,
@@ -43,6 +70,10 @@ const SettingModal = () => {
 
     localStorage.setItem('wordOrderSetting', JSON.stringify(setting));
 
+    user.friends = friend !== '' ? [friend] : [];
+    console.log(user);
+    updateUser(user);
+
     M.toast({ html: `Settring updated...` });
 
     window.location.reload();
@@ -50,7 +81,7 @@ const SettingModal = () => {
 
   const onClose = () => {
     // Clear Fields
-    getSetting();
+    //    getSetting(); // move to useEffect()
   };
 
   return (
@@ -143,6 +174,37 @@ const SettingModal = () => {
           </div>
         </div>
 
+        <h4>Vocabulary Friend</h4>
+
+        <div className='row'>
+          <div>
+            <label htmlFor='friend' className='active'>
+              Choose a friend whose vocabularies you want to see .
+            </label>
+            <select
+              name='friend'
+              value={friend}
+              className='browser-default'
+              onChange={e => setFriend(e.target.value)}
+              multiple={false}
+            >
+              <option value={null} key='0'></option>
+              {users &&
+                users.users.map(
+                  u =>
+                    (!user || u._id !== user._id) && (
+                      <option value={u._id} key={u._id}>
+                        {u.name} ({u.email}) - Vocabulary Count:{' '}
+                        {users.wordsCount.map(wc =>
+                          wc._id === u._id ? wc.count : null
+                        )}
+                      </option>
+                    )
+                )}
+            </select>
+          </div>
+        </div>
+
         <div className='modal-footer'>
           <a
             href='#!'
@@ -164,4 +226,16 @@ const SettingModal = () => {
   );
 };
 
-export default SettingModal;
+const mapStateToProps = state => ({
+  user: state.auth.user,
+  users: state.auth.users,
+  isAuthenticated: state.auth.isAuthenticated,
+  loadingWord: state.word.loading,
+  loading: state.auth.loading
+});
+
+export default connect(mapStateToProps, {
+  getUsers,
+  updateUser,
+  loadUser
+})(SettingModal);

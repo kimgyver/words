@@ -1,10 +1,17 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
-const AddBtn = () => {
+const AddBtn = ({ isAuthenticated, history }) => {
   return (
     <div className='fixed-action-btn'>
       <a
         href='#add-word-modal'
+        onClick={() => {
+          if (!isAuthenticated) {
+            history.push('/signin');
+          }
+        }}
         className='btn-floating btn-large blue darken-2 modal-trigger'
       >
         <i className='large material-icons'>add</i>
@@ -28,4 +35,8 @@ const AddBtn = () => {
   );
 };
 
-export default AddBtn;
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
+
+export default withRouter(connect(mapStateToProps, null)(AddBtn));

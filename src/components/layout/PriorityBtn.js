@@ -24,9 +24,18 @@ const PriorityBtn = ({ word, setPriorityChanageble, updateWord }) => {
             <div key={i}>
               <a
                 href='#!'
-                onClick={() => {
+                onClick={async () => {
+                  const priorityOrigin = word.priority;
                   word.priority = i + 1;
-                  updateWord(word);
+                  const result = await updateWord(word);
+                  if (
+                    result !== null &&
+                    result !== undefined &&
+                    result.type === 'WORDS_ERROR'
+                  ) {
+                    word.priority = priorityOrigin;
+                  }
+
                   setPriorityChanageble(false);
                 }}
                 style={{

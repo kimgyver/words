@@ -1,13 +1,27 @@
 import React, { useState, useRef } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { setCurrent } from '../actions/wordActions';
+import {
+  setCurrent,
+  addWord,
+  removeOriginalWords
+} from '../actions/wordActions';
 import PriorityBtn from './layout/PriorityBtn';
 
 import './WordItem.css';
-// import V from './voicerss-tts.min.js';
+import M from 'materialize-css/dist/js/materialize.min.js';
 
-const WordItem = ({ word, setCurrent, filterString, columnNumber }) => {
+const WordItem = ({
+  word,
+  setCurrent,
+  addWord,
+  removeOriginalWords,
+  filterString,
+  columnNumber,
+  isAuthenticated,
+  history
+}) => {
   const [priorityChanageble, setPriorityChanageble] = useState(false);
   const playText = useRef();
   const playDefinition = useRef();
@@ -100,6 +114,45 @@ const WordItem = ({ word, setCurrent, filterString, columnNumber }) => {
     }, delayTime);
   };
 
+  const isDocumentOwned = () => {
+    if (
+      word.owner === null ||
+      word.owner === undefined ||
+      word.owner._id === ''
+    ) {
+      return false;
+    }
+
+    if (word.owner._id === localStorage.userid) {
+      return true;
+    }
+  };
+
+  const iconShowing = () => {
+    if (localStorage.userrole === 'Admin') {
+      return true;
+    }
+
+    if (isDocumentOwned()) return true;
+
+    return false;
+  };
+
+  const copyToMine = () => {
+    if (!isAuthenticated) {
+      history.push('/signin');
+      return;
+    }
+
+    const newWord = word;
+    newWord.createdAt = new Date();
+    newWord.updatedAt = new Date();
+    newWord.origins.push(newWord._id);
+    addWord(newWord);
+
+    M.toast({ html: 'Copied as your word' });
+  };
+
   return (
     <div className={`col s12 ${getClassByColumnNumber()}`}>
       <div className={bgClass}>
@@ -118,43 +171,75 @@ const WordItem = ({ word, setCurrent, filterString, columnNumber }) => {
                   window.tts(word.text);
                 }}
               >
-                <i className='tiny material-icons' ref={playText}>
+                <i className='tiny material-icons icon-btn' ref={playText}>
                   play_circle_outline
                 </i>
               </a>
             </span>
 
             <div>
+              {!isDocumentOwned() && (
+                <div style={{ display: 'flex' }}>
+                  <a
+                    href='#!'
+                    onClick={() => {
+                      copyToMine();
+                      removeOriginalWords();
+                    }}
+                  >
+                    <i className='small material-icons icon-btn' title='Copy'>
+                      content_copy
+                    </i>
+                  </a>
+                  <span className='owner-name'>
+                    {word.owner === null ||
+                    word.owner === undefined ||
+                    word.owner.name === undefined ||
+                    word.owner.name === ''
+                      ? 'Unknown'
+                      : word.owner.name}
+                  </span>
+                </div>
+              )}
+
               {/* EDIT Button */}
-              <a
-                href='#edit-word-modal'
-                className='modal-trigger'
-                onClick={() => setCurrent(word)}
-              >
-                <i className='small material-icons'>edit</i>
-              </a>
+              {iconShowing() && (
+                <a
+                  href='#edit-word-modal'
+                  className='modal-trigger'
+                  onClick={() => setCurrent(word)}
+                >
+                  <i className='small material-icons icon-btn'>edit</i>
+                </a>
+              )}
 
               {/* CHANGE PRIORITY Button */}
-              <a
-                href='#!'
-                onClick={() => {
-                  setCurrent(word);
-                  priorityChanageble
-                    ? setPriorityChanageble(false)
-                    : setPriorityChanageble(true);
-                }}
-              >
-                <i className='small material-icons'>swap_vertical_circle</i>
-              </a>
+              {iconShowing() && (
+                <a
+                  href='#!'
+                  onClick={() => {
+                    setCurrent(word);
+                    priorityChanageble
+                      ? setPriorityChanageble(false)
+                      : setPriorityChanageble(true);
+                  }}
+                >
+                  <i className='small material-icons icon-btn'>
+                    swap_vertical_circle
+                  </i>
+                </a>
+              )}
 
               {/* DELETE Button */}
-              <a
-                href='#delete-word-modal'
-                className='modal-trigger'
-                onClick={() => setCurrent(word)}
-              >
-                <i className='small material-icons'>clear</i>
-              </a>
+              {iconShowing() && (
+                <a
+                  href='#delete-word-modal'
+                  className='modal-trigger'
+                  onClick={() => setCurrent(word)}
+                >
+                  <i className='small material-icons icon-btn'>clear</i>
+                </a>
+              )}
             </div>
           </div>
 
@@ -184,7 +269,10 @@ const WordItem = ({ word, setCurrent, filterString, columnNumber }) => {
                     window.tts(word.synonyms);
                   }}
                 >
-                  <i className='tiny material-icons' ref={playDefinition}>
+                  <i
+                    className='tiny material-icons icon-btn'
+                    ref={playDefinition}
+                  >
                     play_circle_outline
                   </i>
                 </a>
@@ -208,7 +296,7 @@ const WordItem = ({ word, setCurrent, filterString, columnNumber }) => {
                   }}
                 >
                   <i
-                    className='tiny material-icons'
+                    className='tiny material-icons icon-btn'
                     ref={el => (playExample.current[i] = el)}
                   >
                     play_circle_outline
@@ -227,12 +315,20 @@ WordItem.propTypes = {
   word: PropTypes.object.isRequired,
   setCurrent: PropTypes.func.isRequired,
   filterString: PropTypes.string,
-  columnNumber: PropTypes.number.isRequired
+  columnNumber: PropTypes.number.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
   filterString: state.word.filterString,
-  columnNumber: state.word.columnNumber
+  columnNumber: state.word.columnNumber,
+  isAuthenticated: state.auth.isAuthenticated
 });
 
-export default connect(mapStateToProps, { setCurrent })(WordItem);
+export default withRouter(
+  connect(mapStateToProps, {
+    setCurrent,
+    addWord,
+    removeOriginalWords
+  })(WordItem)
+);

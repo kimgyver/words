@@ -145,5 +145,22 @@
         }, []);
       </pre>
     </li>
+    <li>
+      주인없는 word 의 주인을 admin으로 바꾸기 (1문서만 update된다. 모든 문서
+      update 하려면??)
+      <pre>
+db.words.find({owner: null})
+
+db.words.update(
+   {owner: null},
+   {
+    $set: {
+       owner: ObjectId("5e376438cf5fb148f0a6a661")
+     }
+   }
+)
+
+      </pre>
+    </li>
   </body>
 </html>

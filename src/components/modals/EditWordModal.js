@@ -39,7 +39,7 @@ const EditWordModal = ({ current, updateWord }) => {
 
       updateWord(updatedWord);
 
-      M.toast({ html: `Word updated... '${text}'` });
+      //M.toast({ html: `Word updated... '${text}'` });
 
       // Clear Fields
       setText('');

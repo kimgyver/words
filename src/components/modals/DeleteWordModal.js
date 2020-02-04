@@ -1,12 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { deleteWord } from '../../actions/wordActions';
+import { clearWordsError, deleteWord } from '../../actions/wordActions';
 import M from 'materialize-css/dist/js/materialize.min.js';
 
 import './DeleteWordModal.scss';
 
-const DeleteWordModal = ({ current, deleteWord }) => {
+const DeleteWordModal = ({ current, error, clearWordsError, deleteWord }) => {
+  useEffect(() => {
+    if (error === 'Not authorized.') {
+      M.toast({ html: error });
+      clearWordsError();
+    }
+    // eslint-disable-next-line
+  }, [error]);
+
   const [textWord, setTextWord] = useState('');
 
   const onClose = () => {
@@ -29,7 +37,7 @@ const DeleteWordModal = ({ current, deleteWord }) => {
 
       deleteWord(current._id);
 
-      M.toast({ html: 'Word deleted' });
+      //M.toast({ html: 'Word deleted' });
 
       // Clear Fields
       setTextWord('');
@@ -85,7 +93,10 @@ DeleteWordModal.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  current: state.word.current
+  current: state.word.current,
+  error: state.word.error
 });
 
-export default connect(mapStateToProps, { deleteWord })(DeleteWordModal);
+export default connect(mapStateToProps, { clearWordsError, deleteWord })(
+  DeleteWordModal
+);

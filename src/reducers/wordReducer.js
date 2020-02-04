@@ -2,6 +2,7 @@ import {
   GET_WORDS,
   SET_LOADING,
   WORDS_ERROR,
+  CLEAR_WORDS_ERROR,
   ADD_WORD,
   DELETE_WORD,
   UPDATE_WORD,
@@ -13,7 +14,8 @@ import {
   TOGGLE_COLMUN_NUMBER,
   SELECT_CANDIDATES_DICTIONARY,
   SELECT_DICTIONARY,
-  CLEAR_DICTIONARY
+  CLEAR_DICTIONARY,
+  REMOVE_ORIGINAL_WORDS
 } from '../actions/types';
 
 const MAX_COLUMN_NUMBER = 4;
@@ -42,12 +44,16 @@ export default (state = initialState, action) => {
       return {
         ...state,
         words: [action.payload, ...state.words],
+        filtered: state.filtered ? [action.payload, ...state.filtered] : null,
         loading: false
       };
     case DELETE_WORD:
       return {
         ...state,
         words: state.words.filter(word => word._id !== action.payload),
+        filtered: state.filtered
+          ? state.filtered.filter(word => word._id !== action.payload)
+          : null,
         loading: false
       };
     case UPDATE_WORD:
@@ -55,7 +61,12 @@ export default (state = initialState, action) => {
         ...state,
         words: state.words.map(word =>
           word._id === action.payload._id ? action.payload : word
-        )
+        ),
+        filtered: state.filtered
+          ? state.filtered.map(word =>
+              word._id === action.payload._id ? action.payload : word
+            )
+          : null
       };
     case SEARCH_WORDS:
       return {
@@ -71,6 +82,35 @@ export default (state = initialState, action) => {
       return {
         ...state,
         current: null
+      };
+
+    case REMOVE_ORIGINAL_WORDS:
+      if (localStorage.userrole === 'Admin') {
+        // do nothing
+        return {
+          ...state
+        };
+      }
+
+      const origins = state.words.map(w => w.origins).flat(Infinity);
+      return {
+        ...state,
+        words: state.words.filter(
+          word =>
+            (word.owner !== null && word.owner !== undefined
+              ? word.owner._id === localStorage.userid
+              : false) ||
+            origins.reduce((acc, o) => acc && o !== word._id, true)
+        ),
+        filtered: state.filtered
+          ? state.filtered.filter(
+              word =>
+                (word.owner !== null && word.owner !== undefined
+                  ? word.owner._id === localStorage.userid
+                  : false) ||
+                origins.reduce((acc, o) => acc && o !== word._id, true)
+            )
+          : null
       };
 
     case FILTER_WORDS:
@@ -130,6 +170,11 @@ export default (state = initialState, action) => {
       return {
         ...state,
         error: action.payload
+      };
+    case CLEAR_WORDS_ERROR:
+      return {
+        ...state,
+        error: null
       };
     default:
       return state;

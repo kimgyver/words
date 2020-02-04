@@ -3,12 +3,23 @@ import WordItem from './WordItem';
 import Preloader from './layout/Preloader';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { getWords } from '../actions/wordActions';
+import { getWords, removeOriginalWords } from '../actions/wordActions';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
-const Words = ({ word: { words, loading, filtered }, getWords }) => {
+const Words = ({
+  word: { words, loading, filtered },
+  getWords,
+  removeOriginalWords
+}) => {
+  const getData = async () => {
+    await getWords();
+    removeOriginalWords();
+  };
+
   useEffect(() => {
-    getWords();
+    getData();
+    //getWords();
+    //removeOriginalWords();
     // eslint-disable-next-line
   }, []);
 
@@ -17,7 +28,8 @@ const Words = ({ word: { words, loading, filtered }, getWords }) => {
   }
 
   const wordsForHere = filtered ? filtered : words;
-  //const wordsForHere = words;
+  //console.log('AFTER: ', wordsForHere);
+  // const wordsForHere = words;
 
   return (
     <div>
@@ -37,11 +49,14 @@ const Words = ({ word: { words, loading, filtered }, getWords }) => {
 
 Words.propTypes = {
   word: PropTypes.object.isRequired,
-  getWords: PropTypes.func.isRequired
+  getWords: PropTypes.func.isRequired,
+  removeOriginalWords: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   word: state.word
 });
 
-export default connect(mapStateToProps, { getWords })(Words);
+export default connect(mapStateToProps, { getWords, removeOriginalWords })(
+  Words
+);

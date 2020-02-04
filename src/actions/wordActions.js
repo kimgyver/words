@@ -2,6 +2,7 @@ import {
   GET_WORDS,
   SET_LOADING,
   WORDS_ERROR,
+  CLEAR_WORDS_ERROR,
   ADD_WORD,
   DELETE_WORD,
   UPDATE_WORD,
@@ -13,7 +14,9 @@ import {
   TOGGLE_COLMUN_NUMBER,
   SELECT_CANDIDATES_DICTIONARY,
   SELECT_DICTIONARY,
-  CLEAR_DICTIONARY
+  CLEAR_DICTIONARY,
+  COPY_TO_MINE,
+  REMOVE_ORIGINAL_WORDS
 } from './types';
 
 import { serverUrl } from '../env';
@@ -56,9 +59,15 @@ export const getWords = () => async dispatch => {
       }
     }
 
-    console.log(`${serverUrl()}?${param}`);
-    const res = await fetch(`${serverUrl()}?${param}`);
+    console.log(`${serverUrl()}/word?${param}`);
+    const res = await fetch(`${serverUrl()}/word?${param}`, {
+      headers: {
+        method: 'GET',
+        'x-auth-token': localStorage.token ? localStorage.token : ''
+      }
+    });
     const data = await res.json();
+    // console.log(data);
 
     dispatch({
       type: GET_WORDS,
@@ -74,16 +83,23 @@ export const getWords = () => async dispatch => {
   }
 };
 
+export const clearWordsError = () => {
+  return {
+    type: CLEAR_WORDS_ERROR
+  };
+};
+
 // Add new word
 export const addWord = word => async dispatch => {
   try {
     setLoading();
 
-    const res = await fetch(`${serverUrl()}`, {
+    const res = await fetch(`${serverUrl()}/word`, {
       method: 'POST',
       body: JSON.stringify(word),
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'x-auth-token': localStorage.token ? localStorage.token : ''
       }
     });
     const data = await res.json();
@@ -105,9 +121,24 @@ export const deleteWord = _id => async dispatch => {
   try {
     setLoading();
 
-    await fetch(`${serverUrl()}/${_id}`, {
-      method: 'DELETE'
+    const res = await fetch(`${serverUrl()}/word/${_id}`, {
+      method: 'DELETE',
+      headers: {
+        'x-auth-token': localStorage.token ? localStorage.token : ''
+      }
     });
+
+    const data = await res.json();
+    if (
+      data.msg !== null &&
+      data.msg !== undefined &&
+      data.msg !== 'Word removed'
+    ) {
+      return dispatch({
+        type: WORDS_ERROR,
+        payload: data.msg
+      });
+    }
 
     dispatch({
       type: DELETE_WORD,
@@ -126,15 +157,22 @@ export const updateWord = word => async dispatch => {
   try {
     setLoading();
 
-    const res = await fetch(`${serverUrl()}/${word._id}`, {
+    const res = await fetch(`${serverUrl()}/word/${word._id}`, {
       method: 'PUT',
       body: JSON.stringify(word),
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'x-auth-token': localStorage.token ? localStorage.token : ''
       }
     });
 
     const data = await res.json();
+    if (data.msg !== null && data.msg !== undefined) {
+      return dispatch({
+        type: WORDS_ERROR,
+        payload: data.msg
+      });
+    }
 
     dispatch({
       type: UPDATE_WORD,
@@ -188,6 +226,20 @@ export const filterWords = filter => {
   return {
     type: FILTER_WORDS,
     payload: filter
+  };
+};
+
+// Copy my word from orignal word
+export const copyToMine = word => {
+  return {
+    type: COPY_TO_MINE
+  };
+};
+
+// Remove Original words
+export const removeOriginalWords = () => {
+  return {
+    type: REMOVE_ORIGINAL_WORDS
   };
 };
 
