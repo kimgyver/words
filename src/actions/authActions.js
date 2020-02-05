@@ -154,6 +154,13 @@ export const getUsers = () => async dispatch => {
 export const updateUser = user => async dispatch => {
   try {
     setLoading();
+    console.log(`${serverUrl()}/user/${user._id}`);
+    console.log(JSON.stringify(user));
+    console.log({
+      'Content-Type': 'application/json',
+      'x-auth-token': localStorage.token ? localStorage.token : ''
+    });
+
     const res = await fetch(`${serverUrl()}/user/${user._id}`, {
       method: 'PUT',
       body: JSON.stringify(user),
