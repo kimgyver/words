@@ -73,7 +73,7 @@ export default (state = initialState, action) => {
     case UPDATE_USER:
       return {
         ...state,
-        users: state.users.map(user =>
+        users: state.users.users.map(user =>
           user._id === action.payload._id ? action.payload : user
         ),
         loading: false
