@@ -187,21 +187,17 @@ const SettingModal = ({
               className='browser-default'
               onChange={e => setFriend(e.target.value)}
             >
-              <option value={null} key='0'></option>
+              <option value='' key='0'>
+                I prefer to be alone.
+              </option>
               {users &&
                 users.users.map(
                   u =>
-                    // (!user || u._id !== user._id) && (
-                    //   <option value={u._id} key={u._id}>
-                    //     {u.name} ({u.email}) - Vocabulary Count:{' '}
-                    //     {users.wordsCount.map(wc =>
-                    //       wc._id === u._id ? wc.count : null
-                    //     )}
-                    //   </option>
-                    // )
                     (!user || u._id !== user._id) && (
                       <option value={u._id} key={u._id}>
-                        {u.name} ({u.email}):{' '}
+                        {u.name}
+                        {window.innerWidth > 500 ? ` (${u.email})` : ''}
+                        {': '}
                         {users.wordsCount.reduce(
                           (acc, wc) =>
                             wc._id === u._id ? acc + Number(wc.count) : acc + 0,

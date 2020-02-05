@@ -8,7 +8,6 @@ import {
   removeOriginalWords
 } from '../actions/wordActions';
 import PriorityBtn from './layout/PriorityBtn';
-
 import './WordItem.css';
 import M from 'materialize-css/dist/js/materialize.min.js';
 
@@ -140,7 +139,8 @@ const WordItem = ({
 
   const copyToMine = () => {
     if (!isAuthenticated) {
-      history.push('/signin');
+      M.toast({ html: 'You cannot copy this word without login.' });
+      //history.push('/signin');
       return;
     }
 
@@ -150,7 +150,7 @@ const WordItem = ({
     newWord.origins.push(newWord._id);
     addWord(newWord);
 
-    M.toast({ html: 'Copied as your word' });
+    M.toast({ html: 'Copied to your word list.' });
   };
 
   return (

@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import M from 'materialize-css/dist/js/materialize.min.js';
 
 const AddBtn = ({ isAuthenticated, history }) => {
   return (
@@ -9,7 +10,15 @@ const AddBtn = ({ isAuthenticated, history }) => {
         href='#add-word-modal'
         onClick={() => {
           if (!isAuthenticated) {
-            history.push('/signin');
+            M.toast({ html: 'You cannot add a word without login.' });
+            setTimeout(() => {
+              M.toast({ html: 'Moved to login screen' });
+            }, 4000);
+            setTimeout(() => {
+              //document.querySelector('body').style = null; // removal of modal's foced styling (body overflow:scroll)
+              history.push('/signin');
+            }, 3000);
+            return;
           }
         }}
         className='btn-floating btn-large blue darken-2 modal-trigger'
