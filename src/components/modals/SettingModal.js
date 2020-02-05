@@ -55,7 +55,7 @@ const SettingModal = ({
   // console.log(users);
   // console.log(user);
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (!isAuthenticated) {
       M.toast({ html: 'Please log in first.' });
       return;
@@ -72,7 +72,7 @@ const SettingModal = ({
 
     user.friends = friend !== '' ? [friend] : [];
     console.log(user);
-    updateUser(user);
+    await updateUser(user);
 
     M.toast({ html: `Settring updated...` });
 
