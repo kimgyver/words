@@ -139,18 +139,18 @@ const WordItem = ({
     return false;
   };
 
-  const copyToMine = () => {
+  const copyToMine = async () => {
     if (!isAuthenticated) {
       M.toast({ html: 'You cannot copy this word without login.' });
       //history.push('/signin');
       return;
     }
 
-    const newWord = word;
+    const newWord = { ...word };
     newWord.createdAt = new Date();
     newWord.updatedAt = new Date();
-    newWord.origins.push(newWord._id);
-    addWord(newWord);
+    newWord.origins = [word._id];
+    await addWord(newWord);
 
     M.toast({ html: `Copied to your word list. "${newWord.text}"` });
 
@@ -158,8 +158,8 @@ const WordItem = ({
       setTimeout(() => {
         M.toast({
           html:
-            "Your friend's original vocabulary remains. Don't worry if it disappears from your screen.",
-          displayLength: 9000
+            "Your friend's original vocabulary remains. Don't worry though it disappears from your screen.",
+          displayLength: 8000
         });
       }, 4000);
       setCopyInfoDisplayed(true);
@@ -195,8 +195,8 @@ const WordItem = ({
                 <div style={{ display: 'flex' }}>
                   <a
                     href='#!'
-                    onClick={() => {
-                      copyToMine();
+                    onClick={async () => {
+                      await copyToMine();
                       removeOriginalWords();
                     }}
                   >

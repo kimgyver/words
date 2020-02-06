@@ -41,7 +41,7 @@ const Words = ({
       setTimeout(() => {
         M.toast({
           html: 'You can add vocabularies by yourself, or copy from freinds.',
-          displayLength: 9000
+          displayLength: 8000
         });
       }, 4000);
     }

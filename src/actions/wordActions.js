@@ -231,6 +231,7 @@ export const filterWords = filter => {
 
 // Copy my word from orignal word
 export const copyToMine = word => {
+  console.log('copyToMine');
   return {
     type: COPY_TO_MINE
   };
