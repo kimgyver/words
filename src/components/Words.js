@@ -36,7 +36,7 @@ const Words = ({
 
     if (words === null || words.length === 0) {
       setNoWordsWarningDisplayed(true);
-      M.toast({ html: 'No vocabularies of your own.' });
+      M.toast({ html: 'You have no vocabularies of your own.' });
       setTimeout(() => {
         M.toast({
           html: 'You can add vocabularies by yourself, or copy from freinds.',
