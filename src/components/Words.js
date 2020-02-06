@@ -1,31 +1,60 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import WordItem from './WordItem';
 import Preloader from './layout/Preloader';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { getWords, removeOriginalWords } from '../actions/wordActions';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import M from 'materialize-css/dist/js/materialize.min.js';
 
 const Words = ({
   word: { words, loading, filtered },
+  auth,
   getWords,
   removeOriginalWords
 }) => {
   const getData = async () => {
     await getWords();
-    removeOriginalWords();
+    await removeOriginalWords();
   };
+
+  const [noWordsWarningDisplayed, setNoWordsWarningDisplayed] = useState(false);
 
   useEffect(() => {
     getData();
-    //getWords();
-    //removeOriginalWords();
     // eslint-disable-next-line
   }, []);
 
-  if (loading || words == null) {
+  const messageNoWords = () => {
+    if (noWordsWarningDisplayed) return;
+    //console.log(auth.user);
+    if (auth.user === null || auth.user === undefined) return;
+    // sometimes(in particular, on screen refresh) auth.user gets null maybe from sync issue
+    // that's why localStorage.userid is used here.
+    //if (localStorage.userid === null || localStorage.userid === undefined)
+    //return;
+
+    if (words === null || words.length === 0) {
+      setNoWordsWarningDisplayed(true);
+      M.toast({ html: 'No vocabularies of your own.' });
+      setTimeout(() => {
+        M.toast({
+          html: 'You can add vocabularies by your own, or copy from freinds.',
+          displayLength: 10000
+        });
+      }, 4000);
+    }
+  };
+
+  if (
+    loading ||
+    //(localStorage.userid && auth.user === null) ||
+    words === null
+  ) {
     return <Preloader />;
   }
+
+  messageNoWords();
 
   const wordsForHere = filtered ? filtered : words;
   //console.log('AFTER: ', wordsForHere);
@@ -54,7 +83,8 @@ Words.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  word: state.word
+  word: state.word,
+  auth: state.auth
 });
 
 export default connect(mapStateToProps, { getWords, removeOriginalWords })(

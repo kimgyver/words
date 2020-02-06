@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import './SettingModal.scss';
-import { getUsers, updateUser, loadUser } from '../../actions/authActions';
+import { getUsers, updateUser } from '../../actions/authActions';
 import Preloader from '../layout/Preloader';
 import M from 'materialize-css/dist/js/materialize.min.js';
 
@@ -26,7 +26,7 @@ const SettingModal = ({
   const [order3, setOrder3] = useState(displayOrderOptions[2]);
   const [randomOrder, setRandomOrder] = useState(false);
 
-  const [friend, setFriend] = useState([]);
+  const [friend, setFriend] = useState();
 
   const getSetting = () => {
     // read from localStorage
@@ -71,7 +71,7 @@ const SettingModal = ({
     localStorage.setItem('wordOrderSetting', JSON.stringify(setting));
 
     user.friends = friend !== '' ? [friend] : [];
-    console.log(user);
+    //console.log(user);
     await updateUser(user);
 
     M.toast({ html: `Settring updated...` });
@@ -242,6 +242,5 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps, {
   getUsers,
-  updateUser,
-  loadUser
+  updateUser
 })(SettingModal);

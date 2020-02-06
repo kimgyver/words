@@ -35,7 +35,7 @@ const Register = ({
 
   const onChange = e => setUser({ ...user, [e.target.name]: e.target.value });
 
-  const onSubmit = async e => {
+  const onSubmit = e => {
     e.preventDefault();
     if (name === '' || email === '' || password === '') {
       M.toast({ html: 'Please enter all fields' });
@@ -44,7 +44,7 @@ const Register = ({
       M.toast({ html: 'Passwords do not match' });
       //setAlert('Passwords do not match', 'danger');
     } else {
-      await register({
+      register({
         name,
         email,
         password
