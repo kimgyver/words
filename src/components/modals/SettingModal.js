@@ -4,6 +4,7 @@ import './SettingModal.scss';
 import { getUsers, updateUser } from '../../actions/authActions';
 import Preloader from '../layout/Preloader';
 import M from 'materialize-css/dist/js/materialize.min.js';
+import PriorityDisplay from '../layout/PriorityDisplay';
 
 const SettingModal = ({
   user,
@@ -26,7 +27,7 @@ const SettingModal = ({
   const [order3, setOrder3] = useState(displayOrderOptions[2]);
   const [randomOrder, setRandomOrder] = useState(false);
 
-  const [friend, setFriend] = useState();
+  const [friend, setFriend] = useState('');
 
   const getSetting = () => {
     // read from localStorage
@@ -58,6 +59,7 @@ const SettingModal = ({
   const onSubmit = async () => {
     if (!isAuthenticated) {
       M.toast({ html: 'Please log in first.' });
+      onClose();
       return;
     }
 
@@ -81,7 +83,8 @@ const SettingModal = ({
 
   const onClose = () => {
     // Clear Fields
-    //    getSetting(); // move to useEffect()
+    getSetting();
+    setFriend('');
   };
 
   return (
@@ -91,9 +94,12 @@ const SettingModal = ({
 
         <div className='row'>
           <div>
-            <label htmlFor='order1' className='active'>
-              Order 1
-            </label>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <label htmlFor='order1' className='active'>
+                Order 1
+              </label>
+              {order1 === displayOrderOptions[0] && <PriorityDisplay />}
+            </div>
             <select
               name='order1'
               value={order1}
@@ -113,9 +119,12 @@ const SettingModal = ({
 
         <div className='row'>
           <div>
-            <label htmlFor='order2' className='active'>
-              Order 2
-            </label>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <label htmlFor='order2' className='active'>
+                Order 2
+              </label>
+              {order2 === displayOrderOptions[0] && <PriorityDisplay />}
+            </div>
             <select
               name='order2'
               value={order2}
@@ -135,9 +144,12 @@ const SettingModal = ({
 
         <div className='row'>
           <div>
-            <label htmlFor='order3' className='active'>
-              Order 3
-            </label>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <label htmlFor='order3' className='active'>
+                Order 3
+              </label>
+              {order3 === displayOrderOptions[0] && <PriorityDisplay />}
+            </div>
             <select
               name='order3'
               value={order3}

@@ -5,6 +5,8 @@ import { updateWord } from '../../actions/wordActions';
 import M from 'materialize-css/dist/js/materialize.min.js';
 
 const EditWordModal = ({ current, updateWord }) => {
+  const priorityColor = ['orange', 'blue', 'yellow'];
+
   const [text, setText] = useState('');
   const [definition, setDefinition] = useState('');
   const [synonyms, setSynonyms] = useState('');
@@ -139,6 +141,17 @@ const EditWordModal = ({ current, updateWord }) => {
               <option value='2'>2</option>
               <option value='3'>3</option>
             </select>
+          </div>
+          <div
+            style={{
+              backgroundColor: priorityColor[priority - 1],
+              display: 'inline-block',
+              border: '0px',
+              padding: '0.2rem 0.4rem',
+              margin: '1.5rem 0.2rem 1.2rem 0.2rem'
+            }}
+          >
+            &nbsp;
           </div>
         </div>
 
