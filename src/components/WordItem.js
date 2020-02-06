@@ -19,7 +19,9 @@ const WordItem = ({
   filterString,
   columnNumber,
   isAuthenticated,
-  history
+  history,
+  copyInfoDisplayed,
+  setCopyInfoDisplayed
 }) => {
   const [priorityChanageble, setPriorityChanageble] = useState(false);
   const playText = useRef();
@@ -150,7 +152,18 @@ const WordItem = ({
     newWord.origins.push(newWord._id);
     addWord(newWord);
 
-    M.toast({ html: 'Copied to your word list.' });
+    M.toast({ html: `Copied to your word list. "${newWord.text}"` });
+
+    if (!copyInfoDisplayed) {
+      setTimeout(() => {
+        M.toast({
+          html:
+            "Your friend's original vocabulary remains. Don't worry if it disappears from your screen.",
+          displayLength: 9000
+        });
+      }, 4000);
+      setCopyInfoDisplayed(true);
+    }
   };
 
   return (

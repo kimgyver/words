@@ -19,6 +19,7 @@ const Words = ({
   };
 
   const [noWordsWarningDisplayed, setNoWordsWarningDisplayed] = useState(false);
+  const [copyInfoDisplayed, setCopyInfoDisplayed] = useState(false);
 
   useEffect(() => {
     getData();
@@ -67,7 +68,12 @@ const Words = ({
           {wordsForHere != null &&
             wordsForHere.map(word => (
               <CSSTransition key={word._id} timeout={500} classNames='item'>
-                <WordItem word={word} key={word._id} />
+                <WordItem
+                  word={word}
+                  key={word._id}
+                  copyInfoDisplayed={copyInfoDisplayed}
+                  setCopyInfoDisplayed={setCopyInfoDisplayed}
+                />
               </CSSTransition>
             ))}
         </TransitionGroup>
