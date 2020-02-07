@@ -1,24 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { clearErrors, login } from '../../actions/authActions';
+import { login } from '../../actions/authActions';
 import M from 'materialize-css/dist/js/materialize.min.js';
 
-const Login = ({ login, clearErrors, isAuthenticated, error, history }) => {
-  useEffect(() => {
-    if (isAuthenticated) {
-      history.push('/');
-    }
-
-    if (error === 'Invalid Credentials') {
-      M.toast({ html: error });
-      //setAlert(error, 'danger');
-      clearErrors();
-    }
-    // eslint-disable-next-line
-  }, [error, isAuthenticated, history]);
-
+const Login = ({ login }) => {
   const [user, setUser] = useState({
     email: '',
     password: ''
@@ -35,7 +21,7 @@ const Login = ({ login, clearErrors, isAuthenticated, error, history }) => {
       M.toast({ html: 'Please fill in all fields' });
     } else {
       //console.log(email, password);
-      login({
+      await login({
         email,
         password
       });
@@ -78,18 +64,9 @@ const Login = ({ login, clearErrors, isAuthenticated, error, history }) => {
 };
 
 Login.propTypes = {
-  login: PropTypes.func.isRequired,
-  clearErrors: PropTypes.func
+  login: PropTypes.func.isRequired
 };
 
-const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated,
-  error: state.auth.error
-});
-
-export default withRouter(
-  connect(mapStateToProps, {
-    login,
-    clearErrors
-  })(Login)
-);
+export default connect(null, {
+  login
+})(Login);

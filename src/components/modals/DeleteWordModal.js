@@ -8,8 +8,8 @@ import './DeleteWordModal.scss';
 
 const DeleteWordModal = ({ current, error, clearWordsError, deleteWord }) => {
   useEffect(() => {
-    if (error === 'Not authorized.') {
-      M.toast({ html: error });
+    if (error) {
+      M.toast({ html: 'deleteword:' + error });
       clearWordsError();
     }
     // eslint-disable-next-line

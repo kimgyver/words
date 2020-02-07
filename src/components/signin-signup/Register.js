@@ -1,29 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import { register, clearErrors } from '../../actions/authActions';
+import { register } from '../../actions/authActions';
 import M from 'materialize-css/dist/js/materialize.min.js';
 
-const Register = ({
-  register,
-  error,
-  clearErrors,
-  isAuthenticated,
-  history
-}) => {
-  useEffect(() => {
-    if (isAuthenticated) {
-      history.push('/');
-    }
-
-    if (error === 'User already exists') {
-      //setAlert(error, 'danger');
-      M.toast({ html: error });
-      clearErrors();
-    }
-    // eslint-disable-next-line
-  }, [error, isAuthenticated, history]);
-
+const Register = ({ register }) => {
   const [user, setUser] = useState({
     name: '',
     email: '',
@@ -109,14 +89,6 @@ const Register = ({
   );
 };
 
-const mapStateToProps = state => ({
-  error: state.auth.error,
-  isAuthenticated: state.auth.isAuthenticated
-});
-
-export default withRouter(
-  connect(mapStateToProps, {
-    register,
-    clearErrors
-  })(Register)
-);
+export default connect(null, {
+  register
+})(Register);
