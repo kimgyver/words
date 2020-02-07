@@ -76,6 +76,17 @@ const SearchBar = ({
     loadUser();
   };
 
+  const wordsCountOfMine = () => {
+    if (!words) return 0;
+
+    return words.reduce(
+      (acc, word) =>
+        acc + (word.owner && word.owner._id === localStorage.userid ? 1 : 0),
+      0
+    );
+  };
+
+  console.log(words);
   return (
     <nav>
       <div
@@ -158,8 +169,14 @@ const SearchBar = ({
                 {getUserDisplayName()}
                 <br />
                 <div style={{ display: 'flex', fontSize: '0.8rem' }}>
-                  {words && words ? words.length : 0}
-                  <div style={{ fontSize: '0.7rem' }}> words</div>
+                  {words && wordsCountOfMine()}
+                  <div style={{ fontSize: '0.7rem' }}>
+                    {' '}
+                    {words &&
+                      (words.length === wordsCountOfMine()
+                        ? 'words'
+                        : `w+${words.length - wordsCountOfMine()}w`)}
+                  </div>
                 </div>
               </span>
 
