@@ -90,8 +90,8 @@ const SearchBar = ({
   return (
     <nav>
       <div
-        className='nav-wrapper grey'
-        style={{ display: 'grid', gridTemplateColumns: '20fr 2fr 2fr 2fr' }}
+        className={`nav-wrapper grey ${isAuthenticated ? 'logged-in' : ''}`}
+        // style={{ display: 'grid', gridTemplateColumns: '20fr 2fr 2fr 2fr' }}
       >
         <form>
           <div
@@ -149,36 +149,50 @@ const SearchBar = ({
         </div>
 
         {/* Setting Button */}
-        <div>
-          <a
-            href='#setting-modal'
-            onClick={() => readUserSetting()}
-            className='modal-trigger'
-          >
-            <i className='material-icons icon-btn' style={iconStyle}>
-              reorder
-            </i>
-          </a>
-        </div>
+        {!isAuthenticated && (
+          <div>
+            <a
+              href='#setting-modal'
+              onClick={() => readUserSetting()}
+              className='modal-trigger'
+            >
+              <i className='material-icons icon-btn' style={iconStyle}>
+                reorder
+              </i>
+            </a>
+          </div>
+        )}
 
-        {/* Sign in / User Name / Sign out */}
+        {/* User Name (Setting) / Sign in  / Sign out */}
         <div>
           {isAuthenticated ? (
-            <div style={{ display: 'flex', flexDirection: 'row' }}>
-              <span className='user-name'>
-                {getUserDisplayName()}
-                <br />
-                <div style={{ display: 'flex', fontSize: '0.8rem' }}>
-                  {words && wordsCountOfMine()}
-                  <div style={{ fontSize: '0.7rem' }}>
-                    {' '}
-                    {words &&
-                      (words.length === wordsCountOfMine()
-                        ? 'words'
-                        : `w+${words.length - wordsCountOfMine()}w`)}
+            <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+              <a
+                href='#setting-modal'
+                onClick={() => readUserSetting()}
+                className='modal-trigger'
+              >
+                <span className='user-name'>
+                  {getUserDisplayName()}
+                  <br />
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-around',
+
+                      fontSize: '0.8rem'
+                    }}
+                  >
+                    {words && wordsCountOfMine()}
+                    <div style={{ fontSize: '0.7rem' }}>
+                      {words &&
+                        (words.length === wordsCountOfMine()
+                          ? 'words'
+                          : `w+${words.length - wordsCountOfMine()}w`)}
+                    </div>
                   </div>
-                </div>
-              </span>
+                </span>
+              </a>
 
               <div>
                 <a onClick={onLogout} href='#!'>
