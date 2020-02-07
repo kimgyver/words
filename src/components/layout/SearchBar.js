@@ -86,7 +86,7 @@ const SearchBar = ({
     );
   };
 
-  console.log(words);
+  // console.log(words);
   return (
     <nav>
       <div
