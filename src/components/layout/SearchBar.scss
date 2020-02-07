@@ -3,10 +3,6 @@
   grid-template-columns: 20fr 2fr 2fr 2fr;
 }
 
-.nav-wrapper.logged-in {
-  grid-template-columns: 20fr 2fr 4fr;
-}
-
 .user-name {
   display: block;
   padding: 1.1rem 0.6rem;
@@ -42,10 +38,6 @@
 @media only screen and (max-width: 600px) {
   .nav-wrapper {
     grid-template-columns: 20fr 2fr 2fr;
-  }
-
-  .nav-wrapper.logged-in {
-    grid-template-columns: 20fr 4fr;
   }
 
   .toggle-colomn-count {

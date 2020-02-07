@@ -89,10 +89,7 @@ const SearchBar = ({
   // console.log(words);
   return (
     <nav>
-      <div
-        className={`nav-wrapper grey ${isAuthenticated ? 'logged-in' : ''}`}
-        // style={{ display: 'grid', gridTemplateColumns: '20fr 2fr 2fr 2fr' }}
-      >
+      <div className='nav-wrapper grey'>
         <form>
           <div
             className='input-field'
@@ -150,74 +147,72 @@ const SearchBar = ({
 
         {/* Setting Button */}
         {!isAuthenticated && (
-          <div>
-            <a
-              href='#setting-modal'
-              onClick={() => readUserSetting()}
-              className='modal-trigger'
-            >
-              <i className='material-icons icon-btn' style={iconStyle}>
-                reorder
-              </i>
-            </a>
-          </div>
+          <a
+            href='#setting-modal'
+            onClick={() => readUserSetting()}
+            className='modal-trigger'
+          >
+            <i className='material-icons icon-btn' style={iconStyle}>
+              reorder
+            </i>
+          </a>
         )}
 
-        {/* User Name (Setting) / Sign in  / Sign out */}
-        <div>
-          {isAuthenticated ? (
-            <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-              <a
-                href='#setting-modal'
-                onClick={() => readUserSetting()}
-                className='modal-trigger'
+        {/* User Name (Setting) */}
+        {isAuthenticated && (
+          <a
+            href='#setting-modal'
+            onClick={() => readUserSetting()}
+            className='modal-trigger'
+            style={{ margin: 'auto' }}
+          >
+            <span className='user-name'>
+              {getUserDisplayName()}
+              <br />
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-around',
+
+                  fontSize: '0.8rem'
+                }}
               >
-                <span className='user-name'>
-                  {getUserDisplayName()}
-                  <br />
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-around',
-
-                      fontSize: '0.8rem'
-                    }}
-                  >
-                    {words && wordsCountOfMine()}
-                    <div style={{ fontSize: '0.7rem' }}>
-                      {words &&
-                        (words.length === wordsCountOfMine()
-                          ? 'words'
-                          : `w+${words.length - wordsCountOfMine()}w`)}
-                    </div>
-                  </div>
-                </span>
-              </a>
-
-              <div>
-                <a onClick={onLogout} href='#!'>
-                  <i
-                    className='material-icons icon-btn'
-                    style={iconStyle}
-                    title='Logout'
-                  >
-                    exit_to_app
-                  </i>
-                </a>
+                {words && wordsCountOfMine()}
+                <div style={{ fontSize: '0.7rem' }}>
+                  {words &&
+                    (words.length === wordsCountOfMine()
+                      ? 'words'
+                      : `w+${words.length - wordsCountOfMine()}w`)}
+                </div>
               </div>
-            </div>
-          ) : (
-            <Link to='/signin'>
+            </span>
+          </a>
+        )}
+
+        {/* Sign out / Sign in */}
+        {isAuthenticated ? (
+          <div>
+            <a onClick={onLogout} href='#!'>
               <i
                 className='material-icons icon-btn'
                 style={iconStyle}
-                title='Login'
+                title='Logout'
               >
-                power_settings_new
+                exit_to_app
               </i>
-            </Link>
-          )}
-        </div>
+            </a>
+          </div>
+        ) : (
+          <Link to='/signin'>
+            <i
+              className='material-icons icon-btn'
+              style={iconStyle}
+              title='Login'
+            >
+              power_settings_new
+            </i>
+          </Link>
+        )}
       </div>
     </nav>
   );
