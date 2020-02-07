@@ -1,13 +1,11 @@
 import React, { useRef, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import {
   filterWords,
   clearFilter,
   toggleColumnNumber
 } from '../../actions/wordActions';
-
-import { Link } from 'react-router-dom';
-
 import { getUsers, logout, loadUser } from '../../actions/authActions';
 import M from 'materialize-css/dist/js/materialize.min.js';
 import './SearchBar.scss';
@@ -19,7 +17,8 @@ const SearchBar = ({
   isAuthenticated,
   logout,
   loadUser,
-  getUsers
+  getUsers,
+  words
 }) => {
   const text = useRef('');
 
@@ -151,11 +150,18 @@ const SearchBar = ({
           </a>
         </div>
 
-        {/* Sign in / Sign out */}
+        {/* Sign in / User Name / Sign out */}
         <div>
           {isAuthenticated ? (
             <div style={{ display: 'flex', flexDirection: 'row' }}>
-              <span className='user-name'>{getUserDisplayName()}</span>
+              <span className='user-name'>
+                {getUserDisplayName()}
+                <br />
+                <div style={{ display: 'flex', fontSize: '0.8rem' }}>
+                  {words && words ? words.length : 0}
+                  <div style={{ fontSize: '0.7rem' }}> words</div>
+                </div>
+              </span>
 
               <div>
                 <a onClick={onLogout} href='#!'>
@@ -166,7 +172,6 @@ const SearchBar = ({
                   >
                     exit_to_app
                   </i>
-                  />
                 </a>
               </div>
             </div>
@@ -190,6 +195,7 @@ const SearchBar = ({
 const iconStyle = { padding: '0 1rem 0 1rem' };
 
 const mapStateToProps = state => ({
+  words: state.word.words,
   isAuthenticated: state.auth.isAuthenticated
 });
 
