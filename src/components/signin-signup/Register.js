@@ -54,7 +54,7 @@ const Register = ({
 
   return (
     <div className='form-container'>
-      <h5>I do not have an account</h5>
+      <p className='info-register'>I do not have an account</p>
       <h4>Register</h4>
       <form onSubmit={onSubmit}>
         <div className='form-group'>

@@ -44,7 +44,7 @@ const Login = ({ login, clearErrors, isAuthenticated, error, history }) => {
 
   return (
     <div className='form-container'>
-      <h5>I already has an account</h5>
+      <p className='info-login'>I already has an account</p>
       <h4>Login</h4>
       <form onSubmit={onSubmit}>
         <div className='form-group'>
