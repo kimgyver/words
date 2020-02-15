@@ -84,6 +84,37 @@ const Register = ({ register }) => {
           value='Register'
           className='btn btn-primary btn-block'
         />
+        <div
+          style={{
+            borderStyle: 'solid',
+            borderWidth: '1px',
+            borderColor: 'grey',
+            backgroundColor: '#f8f8f9',
+            color: 'rgba(0,0,0,.87)',
+            borderRadius: '.28571429rem',
+            padding: '0 0.6rem',
+            margin: '1rem 0rem',
+            maxWidth: '20rem',
+            fontSize: '14px'
+          }}
+        >
+          <p>
+            Just for browsing, you can log in with below ID and password without
+            registration.
+          </p>
+          <ul style={{ listStyleType: 'circle', listStylePosition: 'inside' }}>
+            <li style={{ margin: '0 1.5rem' }}>
+              * ID: <b>justuser@words.com</b>
+            </li>
+            <li style={{ margin: '0 1.5rem' }}>
+              * Password: <b>123456</b>
+            </li>
+          </ul>
+          <p>
+            Anyway, registration is suggested.
+            <br /> It's super easy!
+          </p>
+        </div>
       </form>
     </div>
   );
